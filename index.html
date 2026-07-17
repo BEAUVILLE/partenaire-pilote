@@ -1,9 +1,5 @@
-
-
-
-
-
 <!doctype html>
+<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V2-PROPRE-20260717 -->
 <!-- BUILD DIGIY-PILOT-LOCAL-SMS-V1-20260717 -->
 <html lang="fr">
 <head>
@@ -124,8 +120,7 @@
     }
     .legal b{display:block;margin-bottom:5px}
     footer{padding:24px 0 34px;color:var(--muted);font-size:.82rem;text-align:center}
-    .honeypot{position:absolute!important;left:-9999px!important;opacity:0!important;pointer-events:none!important}
-    @media(max-width:850px){
+@media(max-width:850px){
       .hero{grid-template-columns:1fr}
       .form-card{max-width:700px}
     }
@@ -246,7 +241,7 @@
           </div>
 
           <div class="field">
-            <label for="publicLink">Page publique existante</label>
+            <label for="publicLink">Page publique existante <span class="help">(facultatif)</span></label>
             <input id="publicLink" name="public_link" type="url" maxlength="300" placeholder="Site, page professionnelle…">
           </div>
 
@@ -254,13 +249,7 @@
             <label for="services">Présentez brièvement vos services *</label>
             <textarea id="services" name="services" maxlength="900" required placeholder="Ce que vous proposez, pour qui et dans quelle zone…"></textarea>
           </div>
-
-          <div class="field full honeypot" aria-hidden="true">
-            <label for="companyWebsite">Laisser vide</label>
-            <input id="companyWebsite" name="company_website" tabindex="-1" autocomplete="off">
-          </div>
-
-          <div class="field full">
+<div class="field full">
             <div class="check">
               <input id="consent" type="checkbox" required>
               <label for="consent">
@@ -278,7 +267,7 @@
           </div>
           <div class="field full" id="reviewPanel" hidden>
             <div class="check" style="display:block">
-              <strong style="display:block;margin-bottom:8px">Votre demande est prête</strong>
+              <strong style="display:block;margin-bottom:8px">Demande préparée</strong>
               <p class="help" style="margin:0 0 12px">
                 Vérifiez le texte ci-dessous. Il reste uniquement sur votre appareil tant que vous ne l’envoyez pas.
               </p>
@@ -322,7 +311,7 @@
   <script>
     "use strict";
 
-    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V1-20260717";
+    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V2-PROPRE-20260717";
     const DIGIY_SMS_NUMBER = "+221771342889";
     const STORAGE_KEY = "digiy_pilot_draft_v1";
 
@@ -452,7 +441,7 @@
       reviewPanel.scrollIntoView({ behavior: "smooth", block: "start" });
       showStatus(
         "success",
-        "Votre demande est prête. Elle est enregistrée uniquement sur cet appareil jusqu’à son envoi par SMS."
+        "Brouillon local préparé. Vérifiez le texte puis ouvrez votre application SMS."
       );
     }
 
@@ -463,11 +452,6 @@
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-
-      if (clean(document.getElementById("companyWebsite").value)) {
-        return;
-      }
-
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
