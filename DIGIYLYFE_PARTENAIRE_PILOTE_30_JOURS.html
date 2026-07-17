@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b5d3b">
+  <meta name="description" content="Programme pilote DIGIYLYFE : fiche professionnelle personnalisée, carte digitale et QR personnel pendant 30 jours offerts.">
+  <title>DIGIYLYFE — Partenaire pilote</title>
+  <style>
+    :root{
+      --green:#0b6b45;
+      --green-dark:#084c34;
+      --gold:#f2c94c;
+      --red:#c9362b;
+      --ink:#172033;
+      --muted:#667085;
+      --line:#dce4df;
+      --bg:#f6f8f7;
+      --card:#fff;
+      --soft:#eef7f2;
+      --danger:#b42318;
+      --radius:22px;
+      --shadow:0 18px 50px rgba(16,44,31,.12);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(242,201,76,.22), transparent 28rem),
+        radial-gradient(circle at 100% 12%, rgba(11,107,69,.14), transparent 30rem),
+        var(--bg);
+    }
+    button,input,select,textarea{font:inherit}
+    a{color:inherit}
+    .wrap{width:min(1120px,calc(100% - 28px));margin:auto}
+    .senegal-line{height:6px;background:linear-gradient(90deg,var(--green) 0 33.33%,var(--gold) 33.33% 66.66%,var(--red) 66.66%)}
+    header{padding:24px 0 12px}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900}
+    .mark{
+      width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+      background:var(--green);color:white;box-shadow:0 10px 24px rgba(11,107,69,.24)
+    }
+    .brand small{display:block;color:var(--muted);font-weight:700;margin-top:2px}
+    .pill{
+      border:1px solid #bcd8c9;background:#fff;color:var(--green-dark);
+      border-radius:999px;padding:8px 12px;font-size:.82rem;font-weight:850
+    }
+    .hero{
+      display:grid;grid-template-columns:1.08fr .92fr;gap:28px;align-items:center;
+      padding:28px 0 42px
+    }
+    .kicker{
+      display:inline-flex;gap:8px;align-items:center;background:var(--soft);color:var(--green-dark);
+      border:1px solid #cbe4d5;border-radius:999px;padding:8px 12px;font-weight:850;font-size:.85rem
+    }
+    h1{font-size:clamp(2.2rem,6vw,4.65rem);line-height:.98;letter-spacing:-.055em;margin:18px 0}
+    .lead{font-size:clamp(1rem,2vw,1.22rem);line-height:1.65;color:#475467;max-width:700px}
+    .promise{
+      margin:22px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px
+    }
+    .promise div{
+      background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px;
+      font-weight:800;box-shadow:0 6px 20px rgba(20,50,35,.05)
+    }
+    .promise span{display:block;color:var(--green);font-size:1.1rem;margin-bottom:3px}
+    .fine{font-size:.86rem;line-height:1.55;color:var(--muted)}
+    .form-card{
+      background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow);overflow:hidden
+    }
+    .form-head{
+      padding:22px 22px 18px;background:linear-gradient(135deg,var(--green-dark),var(--green));
+      color:white
+    }
+    .form-head h2{margin:0 0 6px;font-size:1.45rem}
+    .form-head p{margin:0;color:#dcf4e8;line-height:1.5}
+    form{padding:22px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .field{display:flex;flex-direction:column;gap:7px}
+    .full{grid-column:1/-1}
+    label{font-size:.82rem;font-weight:850;color:#344054}
+    input,select,textarea{
+      width:100%;border:1px solid #cfd8d3;border-radius:12px;padding:11px 12px;
+      color:var(--ink);background:#fff;outline:none
+    }
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--green);box-shadow:0 0 0 3px rgba(11,107,69,.12)
+    }
+    textarea{min-height:104px;resize:vertical}
+    .help{font-size:.76rem;color:var(--muted);line-height:1.45}
+    .check{
+      display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;
+      padding:12px;border-radius:13px;background:#f8faf9;border:1px solid var(--line)
+    }
+    .check input{width:18px;height:18px;margin-top:2px}
+    .check label{font-weight:650;line-height:1.5}
+    .btn{
+      width:100%;border:0;border-radius:14px;padding:14px 18px;font-weight:900;
+      background:var(--green);color:white;cursor:pointer;box-shadow:0 10px 24px rgba(11,107,69,.22)
+    }
+    .btn:hover{background:var(--green-dark)}
+    .btn:disabled{opacity:.62;cursor:wait}
+    .status{
+      display:none;margin-top:14px;border-radius:14px;padding:13px 14px;
+      font-size:.9rem;line-height:1.5
+    }
+    .status.show{display:block}
+    .status.success{background:#ecfdf3;color:#067647;border:1px solid #abefc6}
+    .status.error{background:#fff1f0;color:var(--danger);border:1px solid #f4c7c3}
+    .retry{margin-top:10px;background:#fff;color:var(--danger);border:1px solid #e6b9b4;box-shadow:none}
+    .legal{
+      margin:8px 0 48px;background:#fff;border:1px solid var(--line);border-radius:18px;
+      padding:18px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px
+    }
+    .legal b{display:block;margin-bottom:5px}
+    footer{padding:24px 0 34px;color:var(--muted);font-size:.82rem;text-align:center}
+    .honeypot{position:absolute!important;left:-9999px!important;opacity:0!important;pointer-events:none!important}
+    @media(max-width:850px){
+      .hero{grid-template-columns:1fr}
+      .form-card{max-width:700px}
+    }
+    @media(max-width:620px){
+      .wrap{width:min(100% - 18px,1120px)}
+      header{padding-top:16px}
+      .nav{align-items:flex-start}
+      .pill{font-size:.72rem;padding:7px 9px}
+      .hero{padding-top:18px;gap:22px}
+      .promise,.grid,.legal{grid-template-columns:1fr}
+      .full{grid-column:auto}
+      form{padding:17px}
+      .form-head{padding:20px 17px}
+    }
+  </style>
+</head>
+<body>
+  <div class="senegal-line"></div>
+
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="mark">DY</div>
+        <div>DIGIYLYFE<small>Le terrain garde la main.</small></div>
+      </div>
+      <div class="pill">50 activations pilotes</div>
+    </div>
+  </header>
+
+  <main class="wrap hero">
+    <section>
+      <div class="kicker">Programme partenaire pilote · 30 jours offerts</div>
+      <h1>Votre présence professionnelle. Votre QR. Vos contacts directs.</h1>
+      <p class="lead">
+        DIGIYLYFE ouvre son programme pilote à tous les professionnels :
+        chauffeurs, restaurants, boutiques, artisans, hébergements, recruteurs,
+        activités touristiques et autres métiers de terrain.
+      </p>
+
+      <div class="promise">
+        <div><span>✓</span>Fiche professionnelle personnalisée</div>
+        <div><span>✓</span>Carte de visite digitale</div>
+        <div><span>✓</span>QR personnel vers votre fiche</div>
+        <div><span>✓</span>0 % de commission DIGIY</div>
+      </div>
+
+      <p class="fine">
+        Les 30 jours commencent uniquement lorsque votre fiche est réellement activée.
+        L’inscription est une demande de participation : aucune fiche n’est publiée automatiquement.
+        Après l’essai, vous choisissez de continuer avec une offre DIGIYLYFE ou de mettre la fiche en pause.
+      </p>
+    </section>
+
+    <section class="form-card" aria-labelledby="formTitle">
+      <div class="form-head">
+        <h2 id="formTitle">Demander ma place pilote</h2>
+        <p>Quelques informations suffisent. DIGIYLYFE vous recontacte après vérification.</p>
+      </div>
+
+      <form id="pilotForm" novalidate>
+        <div class="grid">
+          <div class="field">
+            <label for="fullName">Nom public ou nom du responsable *</label>
+            <input id="fullName" name="full_name" autocomplete="name" maxlength="120" required>
+          </div>
+
+          <div class="field">
+            <label for="businessName">Nom de l’activité</label>
+            <input id="businessName" name="business_name" maxlength="140" placeholder="Ex. Transfert Saly AIBD">
+          </div>
+
+          <div class="field">
+            <label for="module">Votre activité principale *</label>
+            <select id="module" name="preferred_module" required>
+              <option value="">Choisir</option>
+              <option value="DRIVER">Je conduis — DRIVER</option>
+              <option value="LOC">Je loue — LOC</option>
+              <option value="RESA">Je restaure — RESA</option>
+              <option value="MARKET">Je vends — MARKET</option>
+              <option value="BUILD">Je suis artisan — BUILD</option>
+              <option value="JOBS">Je recrute / je propose mes compétences — JOBS</option>
+              <option value="EXPLORE">Je propose une activité ou une sortie — EXPLORE</option>
+              <option value="CARNET">Je souhaite découvrir DIGIY CARNET</option>
+              <option value="AUTRE">Autre activité</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="city">Ville principale *</label>
+            <input id="city" name="city" autocomplete="address-level2" maxlength="100" required placeholder="Ex. Saly">
+          </div>
+
+          <div class="field full">
+            <label for="zone">Zone d’activité</label>
+            <input id="zone" name="zone" maxlength="180" placeholder="Ex. Saly · Mbour · Petite Côte · AIBD">
+          </div>
+
+          <div class="field">
+            <label for="phone">Téléphone professionnel *</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="32" required placeholder="+221 …">
+            <span class="help">Appel ou SMS. WhatsApp n’est pas obligatoire.</span>
+          </div>
+
+          <div class="field">
+            <label for="email">E-mail professionnel</label>
+            <input id="email" name="email" type="email" autocomplete="email" maxlength="180">
+          </div>
+
+          <div class="field">
+            <label for="contactPreference">Moyen de contact préféré *</label>
+            <select id="contactPreference" name="contact_preference" required>
+              <option value="">Choisir</option>
+              <option value="APPEL">Appel téléphonique</option>
+              <option value="SMS">SMS</option>
+              <option value="EMAIL">E-mail</option>
+              <option value="TERRAIN">Rencontre directe</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="publicLink">Page publique existante</label>
+            <input id="publicLink" name="public_link" type="url" maxlength="300" placeholder="Site, page professionnelle…">
+          </div>
+
+          <div class="field full">
+            <label for="services">Présentez brièvement vos services *</label>
+            <textarea id="services" name="services" maxlength="900" required placeholder="Ce que vous proposez, pour qui et dans quelle zone…"></textarea>
+          </div>
+
+          <div class="field full honeypot" aria-hidden="true">
+            <label for="companyWebsite">Laisser vide</label>
+            <input id="companyWebsite" name="company_website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="field full">
+            <div class="check">
+              <input id="consent" type="checkbox" required>
+              <label for="consent">
+                Je confirme que ces informations sont professionnelles et exactes.
+                J’autorise DIGIYLYFE à me recontacter pour étudier ma demande.
+                Je comprends que ce programme ne donne aucune part de propriété,
+                aucun droit social et aucun pouvoir de décision dans DIGIYLYFE.
+              </label>
+            </div>
+          </div>
+
+          <div class="field full">
+            <button class="btn" id="submitBtn" type="submit">Envoyer ma demande</button>
+            <div class="status" id="statusBox" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <section class="wrap legal">
+    <div>
+      <b>Activation contrôlée</b>
+      DIGIYLYFE vérifie les informations avant toute publication.
+    </div>
+    <div>
+      <b>Essai réel</b>
+      Les 30 jours démarrent à l’activation de la fiche, pas au dépôt de la demande.
+    </div>
+    <div>
+      <b>Relation directe</b>
+      La présence ne garantit pas un nombre de clients, mais facilite le contact direct.
+    </div>
+  </section>
+
+  <footer class="wrap">
+    DIGIYLYFE · Paiement direct au professionnel · 0 % de commission DIGIY
+  </footer>
+
+  <script>
+    "use strict";
+
+    /*
+      Réception des demandes :
+      - Projet Supabase DIGIY existant
+      - Table publique attendue : partners
+      - Colonnes utilisées : full_name, phone, city, preferred_module, notes, status
+      - Aucune API payante ni bibliothèque externe.
+    */
+    const SUPABASE_URL = "https://wesqmwjjtsefyjnluosj.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
+    const TABLE = "partners";
+    const PENDING_KEY = "digiy_pilot_pending_v1";
+
+    const form = document.getElementById("pilotForm");
+    const button = document.getElementById("submitBtn");
+    const statusBox = document.getElementById("statusBox");
+
+    function clean(value) {
+      return String(value || "").trim();
+    }
+
+    function showStatus(type, message, retry = false) {
+      statusBox.className = "status show " + type;
+      statusBox.innerHTML = "";
+      const text = document.createElement("div");
+      text.textContent = message;
+      statusBox.appendChild(text);
+
+      if (retry) {
+        const retryButton = document.createElement("button");
+        retryButton.type = "button";
+        retryButton.className = "btn retry";
+        retryButton.textContent = "Réessayer l’envoi";
+        retryButton.addEventListener("click", retryPending);
+        statusBox.appendChild(retryButton);
+      }
+    }
+
+    function reference() {
+      const date = new Date();
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      const code = Math.random().toString(36).slice(2, 7).toUpperCase();
+      return `DYP-${y}${m}${d}-${code}`;
+    }
+
+    function buildPayload() {
+      const ref = reference();
+      const city = clean(document.getElementById("city").value);
+      const zone = clean(document.getElementById("zone").value);
+
+      const details = {
+        reference: ref,
+        programme: "PARTENAIRE PILOTE DIGIYLYFE",
+        trial_days: 30,
+        trial_starts_on_activation: true,
+        business_name: clean(document.getElementById("businessName").value),
+        email: clean(document.getElementById("email").value),
+        zone,
+        services: clean(document.getElementById("services").value),
+        contact_preference: document.getElementById("contactPreference").value,
+        public_link: clean(document.getElementById("publicLink").value),
+        ownership_rights: false,
+        submitted_at: new Date().toISOString(),
+        source_page: location.href
+      };
+
+      return {
+        full_name: clean(document.getElementById("fullName").value),
+        phone: clean(document.getElementById("phone").value),
+        city: zone ? `${city} · ${zone}` : city,
+        preferred_module: document.getElementById("module").value,
+        notes: JSON.stringify(details),
+        status: "pre_registered"
+      };
+    }
+
+    async function sendPayload(payload) {
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const detail = await response.text().catch(() => "");
+        throw new Error(`Réception impossible (${response.status}). ${detail}`.trim());
+      }
+    }
+
+    async function retryPending() {
+      const raw = localStorage.getItem(PENDING_KEY);
+      if (!raw) {
+        showStatus("error", "Aucune demande en attente sur cet appareil.");
+        return;
+      }
+
+      button.disabled = true;
+      try {
+        const payload = JSON.parse(raw);
+        await sendPayload(payload);
+        localStorage.removeItem(PENDING_KEY);
+        const info = JSON.parse(payload.notes);
+        showStatus("success", `Demande reçue. Référence : ${info.reference}. DIGIYLYFE vérifiera les informations avant de vous recontacter.`);
+        form.reset();
+      } catch (error) {
+        console.error(error);
+        showStatus("error", "La connexion n’est pas encore disponible. Votre demande reste conservée sur cet appareil.", true);
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (clean(document.getElementById("companyWebsite").value)) {
+        return;
+      }
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const payload = buildPayload();
+      button.disabled = true;
+      button.textContent = "Envoi en cours…";
+      showStatus("success", "Transmission de votre demande…");
+
+      try {
+        await sendPayload(payload);
+        localStorage.removeItem(PENDING_KEY);
+        const info = JSON.parse(payload.notes);
+        showStatus(
+          "success",
+          `Votre demande a bien été reçue. Référence : ${info.reference}. Les 30 jours commenceront uniquement après activation de votre fiche.`
+        );
+        form.reset();
+      } catch (error) {
+        console.error(error);
+        localStorage.setItem(PENDING_KEY, JSON.stringify(payload));
+        showStatus(
+          "error",
+          "La demande n’a pas pu être transmise pour le moment. Elle est conservée sur cet appareil afin de pouvoir réessayer.",
+          true
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "Envoyer ma demande";
+      }
+    });
+
+    if (localStorage.getItem(PENDING_KEY)) {
+      showStatus("error", "Une demande précédente est encore en attente d’envoi sur cet appareil.", true);
+    }
+  </script>
+</body>
+</html>
