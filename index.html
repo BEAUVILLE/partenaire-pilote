@@ -301,17 +301,20 @@
       Réception des demandes :
       - Projet Supabase DIGIY existant
       - Table publique attendue : partners
-      - Colonnes utilisées : full_name, phone, city, preferred_module, notes, status
+      - La page lit le schéma PostgREST avant l'envoi et utilise uniquement
+        les colonnes réellement présentes dans la table.
       - Aucune API payante ni bibliothèque externe.
     */
     const SUPABASE_URL = "https://wesqmwjjtsefyjnluosj.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
     const TABLE = "partners";
-    const PENDING_KEY = "digiy_pilot_pending_v1";
+    const PENDING_KEY = "digiy_pilot_pending_v2";
 
     const form = document.getElementById("pilotForm");
     const button = document.getElementById("submitBtn");
     const statusBox = document.getElementById("statusBox");
+
+    let cachedTableSchema = null;
 
     function clean(value) {
       return String(value || "").trim();
@@ -320,6 +323,7 @@
     function showStatus(type, message, retry = false) {
       statusBox.className = "status show " + type;
       statusBox.innerHTML = "";
+
       const text = document.createElement("div");
       text.textContent = message;
       statusBox.appendChild(text);
@@ -343,38 +347,155 @@
       return `DYP-${y}${m}${d}-${code}`;
     }
 
-    function buildPayload() {
-      const ref = reference();
-      const city = clean(document.getElementById("city").value);
-      const zone = clean(document.getElementById("zone").value);
-
-      const details = {
-        reference: ref,
+    function buildSubmission() {
+      return {
+        reference: reference(),
         programme: "PARTENAIRE PILOTE DIGIYLYFE",
         trial_days: 30,
         trial_starts_on_activation: true,
+        full_name: clean(document.getElementById("fullName").value),
         business_name: clean(document.getElementById("businessName").value),
+        preferred_module: document.getElementById("module").value,
+        city: clean(document.getElementById("city").value),
+        zone: clean(document.getElementById("zone").value),
+        phone: clean(document.getElementById("phone").value),
         email: clean(document.getElementById("email").value),
-        zone,
-        services: clean(document.getElementById("services").value),
         contact_preference: document.getElementById("contactPreference").value,
         public_link: clean(document.getElementById("publicLink").value),
+        services: clean(document.getElementById("services").value),
         ownership_rights: false,
+        status: "pre_registered",
         submitted_at: new Date().toISOString(),
         source_page: location.href
       };
-
-      return {
-        full_name: clean(document.getElementById("fullName").value),
-        phone: clean(document.getElementById("phone").value),
-        city: zone ? `${city} · ${zone}` : city,
-        preferred_module: document.getElementById("module").value,
-        notes: JSON.stringify(details),
-        status: "pre_registered"
-      };
     }
 
-    async function sendPayload(payload) {
+    async function getTableSchema() {
+      if (cachedTableSchema) return cachedTableSchema;
+
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
+        method: "GET",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+          "Accept": "application/openapi+json"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Lecture du schéma impossible (${response.status}).`);
+      }
+
+      const openApi = await response.json();
+      const schema =
+        openApi?.definitions?.[TABLE] ||
+        openApi?.components?.schemas?.[TABLE];
+
+      if (!schema || !schema.properties) {
+        throw new Error(`La table « ${TABLE} » n’est pas visible dans le schéma Supabase.`);
+      }
+
+      cachedTableSchema = schema;
+      console.info("Colonnes Supabase détectées :", Object.keys(schema.properties));
+      return schema;
+    }
+
+    function firstColumn(columns, candidates) {
+      return candidates.find(name => columns.has(name)) || "";
+    }
+
+    function valueForColumn(schema, column, value) {
+      const property = schema.properties?.[column] || {};
+      if (property.type === "object" || property.format === "json") {
+        return value;
+      }
+      return typeof value === "string" ? value : JSON.stringify(value);
+    }
+
+    function mapSubmissionToSchema(submission, schema) {
+      const columns = new Set(Object.keys(schema.properties || {}));
+      const payload = {};
+      const used = new Set();
+
+      function assign(candidates, value) {
+        if (value === undefined || value === null || value === "") return "";
+        const column = firstColumn(columns, candidates.filter(name => !used.has(name)));
+        if (!column) return "";
+        payload[column] = valueForColumn(schema, column, value);
+        used.add(column);
+        return column;
+      }
+
+      assign(["full_name", "name", "contact_name", "owner_name"], submission.full_name);
+      assign(["business_name", "company_name", "activity_name", "trade_name"], submission.business_name);
+      assign(["phone", "phone_number", "telephone", "contact_phone", "whatsapp"], submission.phone);
+      assign(["email", "contact_email", "mail"], submission.email);
+      assign(["city", "location", "locality", "town"], submission.city);
+      assign(["zone", "service_area", "coverage_area", "area", "address"], submission.zone);
+      assign(["preferred_module", "module", "module_code", "category", "activity_type"], submission.preferred_module);
+      assign(["contact_preference", "preferred_contact", "contact_channel"], submission.contact_preference);
+      assign(["public_link", "website", "source_url", "profile_url"], submission.public_link);
+      assign(["services", "service_description", "activity_description"], submission.services);
+      assign(["reference", "ref", "request_code", "code"], submission.reference);
+      assign(["source", "origin", "source_page"], submission.source_page);
+      assign(["status", "state"], submission.status);
+
+      const completeDetails = {
+        reference: submission.reference,
+        programme: submission.programme,
+        trial_days: submission.trial_days,
+        trial_starts_on_activation: submission.trial_starts_on_activation,
+        full_name: submission.full_name,
+        business_name: submission.business_name,
+        preferred_module: submission.preferred_module,
+        city: submission.city,
+        zone: submission.zone,
+        phone: submission.phone,
+        email: submission.email,
+        contact_preference: submission.contact_preference,
+        public_link: submission.public_link,
+        services: submission.services,
+        ownership_rights: false,
+        submitted_at: submission.submitted_at,
+        source_page: submission.source_page
+      };
+
+      assign(
+        ["notes", "details", "metadata", "data", "extra", "message", "description"],
+        completeDetails
+      );
+
+      if (Object.keys(payload).length === 0) {
+        throw new Error("Aucune colonne compatible n’a été trouvée dans la table partners.");
+      }
+
+      const required = Array.isArray(schema.required) ? schema.required : [];
+      const missingRequired = required.filter(column => {
+        const property = schema.properties?.[column] || {};
+        const hasDefault = property.default !== undefined;
+        const isGenerated =
+          property.format === "uuid" ||
+          column === "id" ||
+          column === "created_at" ||
+          column === "updated_at";
+        return !Object.prototype.hasOwnProperty.call(payload, column) && !hasDefault && !isGenerated;
+      });
+
+      if (missingRequired.length) {
+        throw new Error(
+          "Colonnes obligatoires non alimentées dans partners : " +
+          missingRequired.join(", ")
+        );
+      }
+
+      console.info("Payload adapté au schéma :", Object.keys(payload));
+      return payload;
+    }
+
+    async function sendSubmission(submission) {
+      const schema = await getTableSchema();
+      const payload = mapSubmissionToSchema(submission, schema);
+
       const response = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
         method: "POST",
         headers: {
@@ -400,16 +521,23 @@
       }
 
       button.disabled = true;
+
       try {
-        const payload = JSON.parse(raw);
-        await sendPayload(payload);
+        const submission = JSON.parse(raw);
+        await sendSubmission(submission);
         localStorage.removeItem(PENDING_KEY);
-        const info = JSON.parse(payload.notes);
-        showStatus("success", `Demande reçue. Référence : ${info.reference}. DIGIYLYFE vérifiera les informations avant de vous recontacter.`);
+        showStatus(
+          "success",
+          `Demande reçue. Référence : ${submission.reference}. DIGIYLYFE vérifiera les informations avant de vous recontacter.`
+        );
         form.reset();
       } catch (error) {
         console.error(error);
-        showStatus("error", "La connexion n’est pas encore disponible. Votre demande reste conservée sur cet appareil.", true);
+        showStatus(
+          "error",
+          "La demande n’a pas encore pu être transmise : " + (error.message || "erreur inconnue"),
+          true
+        );
       } finally {
         button.disabled = false;
       }
@@ -427,26 +555,27 @@
         return;
       }
 
-      const payload = buildPayload();
+      const submission = buildSubmission();
       button.disabled = true;
       button.textContent = "Envoi en cours…";
       showStatus("success", "Transmission de votre demande…");
 
       try {
-        await sendPayload(payload);
+        await sendSubmission(submission);
         localStorage.removeItem(PENDING_KEY);
-        const info = JSON.parse(payload.notes);
         showStatus(
           "success",
-          `Votre demande a bien été reçue. Référence : ${info.reference}. Les 30 jours commenceront uniquement après activation de votre fiche.`
+          `Votre demande a bien été reçue. Référence : ${submission.reference}. Les 30 jours commenceront uniquement après activation de votre fiche.`
         );
         form.reset();
       } catch (error) {
         console.error(error);
-        localStorage.setItem(PENDING_KEY, JSON.stringify(payload));
+        localStorage.setItem(PENDING_KEY, JSON.stringify(submission));
         showStatus(
           "error",
-          "La demande n’a pas pu être transmise pour le moment. Elle est conservée sur cet appareil afin de pouvoir réessayer.",
+          "La demande n’a pas pu être transmise pour le moment : " +
+          (error.message || "erreur inconnue") +
+          " Elle reste conservée sur cet appareil.",
           true
         );
       } finally {
@@ -456,7 +585,11 @@
     });
 
     if (localStorage.getItem(PENDING_KEY)) {
-      showStatus("error", "Une demande précédente est encore en attente d’envoi sur cet appareil.", true);
+      showStatus(
+        "error",
+        "Une demande précédente est encore en attente d’envoi sur cet appareil.",
+        true
+      );
     }
   </script>
 </body>
