@@ -1,4 +1,10 @@
+
+
+
+
+
 <!doctype html>
+<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V1-20260717 -->
 <html lang="fr">
 <head>
   <meta charset="utf-8">
@@ -168,7 +174,7 @@
 
       <p class="fine">
         Les 30 jours commencent uniquement lorsque votre fiche est réellement activée.
-        L’inscription est une demande de participation : aucune fiche n’est publiée automatiquement.
+        L’inscription est une demande de participation : aucune fiche n’est publiée automatiquement et aucune donnée n’est envoyée vers une base externe.
         Après l’essai, vous choisissez de continuer avec une offre DIGIYLYFE ou de mettre la fiche en pause.
       </p>
     </section>
@@ -176,7 +182,7 @@
     <section class="form-card" aria-labelledby="formTitle">
       <div class="form-head">
         <h2 id="formTitle">Demander ma place pilote</h2>
-        <p>Quelques informations suffisent. DIGIYLYFE vous recontacte après vérification.</p>
+        <p>Quelques informations suffisent. La page prépare votre demande, puis vous l’envoyez directement par SMS à DIGIYLYFE.</p>
       </div>
 
       <form id="pilotForm" novalidate>
@@ -267,9 +273,28 @@
           </div>
 
           <div class="field full">
-            <button class="btn" id="submitBtn" type="submit">Envoyer ma demande</button>
+            <button class="btn" id="submitBtn" type="submit">Préparer ma demande</button>
             <div class="status" id="statusBox" role="status" aria-live="polite"></div>
           </div>
+          <div class="field full" id="reviewPanel" hidden>
+            <div class="check" style="display:block">
+              <strong style="display:block;margin-bottom:8px">Votre demande est prête</strong>
+              <p class="help" style="margin:0 0 12px">
+                Vérifiez le texte ci-dessous. Il reste uniquement sur votre appareil tant que vous ne l’envoyez pas.
+              </p>
+              <textarea id="preparedMessage" readonly style="min-height:220px"></textarea>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+                <a id="smsLink" class="btn" href="#" style="text-decoration:none;text-align:center">Envoyer par SMS</a>
+                <button id="copyBtn" class="btn" type="button" style="background:#fff;color:var(--green);border:1px solid #bcd8c9;box-shadow:none">
+                  Copier la demande
+                </button>
+              </div>
+              <button id="clearBtn" class="btn" type="button" style="margin-top:10px;background:#fff;color:#667085;border:1px solid var(--line);box-shadow:none">
+                Effacer le brouillon de cet appareil
+              </button>
+            </div>
+          </div>
+
         </div>
       </form>
     </section>
@@ -297,47 +322,33 @@
   <script>
     "use strict";
 
-    /*
-      Réception des demandes :
-      - Projet Supabase DIGIY existant
-      - Table : partners
-      - Aucun appel au schéma OpenAPI : certains projets refusent cette lecture en 401.
-      - En cas de colonne inconnue PGRST204, la page adapte automatiquement
-        le nom de la colonne puis recommence l'envoi.
-      - Aucune API payante ni bibliothèque externe.
-    */
-    const SUPABASE_URL = "https://wesqmwjjtsefyjnluosj.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
-    const TABLE = "partners";
-    const PENDING_KEY = "digiy_pilot_pending_v3";
+    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V1-20260717";
+    const DIGIY_SMS_NUMBER = "+221771342889";
+    const STORAGE_KEY = "digiy_pilot_draft_v1";
+
+    console.info("BUILD :", BUILD);
+    console.info("Mode : localStorage + SMS direct");
+    console.info("Aucune base externe. Aucune API payante.");
 
     const form = document.getElementById("pilotForm");
-    const button = document.getElementById("submitBtn");
+    const submitBtn = document.getElementById("submitBtn");
     const statusBox = document.getElementById("statusBox");
+    const reviewPanel = document.getElementById("reviewPanel");
+    const preparedMessage = document.getElementById("preparedMessage");
+    const smsLink = document.getElementById("smsLink");
+    const copyBtn = document.getElementById("copyBtn");
+    const clearBtn = document.getElementById("clearBtn");
 
     function clean(value) {
       return String(value || "").trim();
     }
 
-    function showStatus(type, message, retry = false) {
+    function showStatus(type, message) {
       statusBox.className = "status show " + type;
-      statusBox.innerHTML = "";
-
-      const text = document.createElement("div");
-      text.textContent = message;
-      statusBox.appendChild(text);
-
-      if (retry) {
-        const retryButton = document.createElement("button");
-        retryButton.type = "button";
-        retryButton.className = "btn retry";
-        retryButton.textContent = "Réessayer l’envoi";
-        retryButton.addEventListener("click", retryPending);
-        statusBox.appendChild(retryButton);
-      }
+      statusBox.textContent = message;
     }
 
-    function reference() {
+    function createReference() {
       const date = new Date();
       const y = date.getFullYear();
       const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -346,206 +357,111 @@
       return `DYP-${y}${m}${d}-${code}`;
     }
 
-    function buildSubmission() {
+    function collectDraft() {
+      const existing = readDraft();
+
       return {
-        reference: reference(),
-        programme: "PARTENAIRE PILOTE DIGIYLYFE",
-        trial_days: 30,
-        trial_starts_on_activation: true,
+        reference: existing?.reference || createReference(),
         full_name: clean(document.getElementById("fullName").value),
         business_name: clean(document.getElementById("businessName").value),
-        preferred_module: document.getElementById("module").value,
+        module_code: document.getElementById("module").value,
+        module_label: document.getElementById("module").selectedOptions[0]?.textContent || "",
         city: clean(document.getElementById("city").value),
         zone: clean(document.getElementById("zone").value),
         phone: clean(document.getElementById("phone").value),
         email: clean(document.getElementById("email").value),
         contact_preference: document.getElementById("contactPreference").value,
+        contact_label: document.getElementById("contactPreference").selectedOptions[0]?.textContent || "",
         public_link: clean(document.getElementById("publicLink").value),
         services: clean(document.getElementById("services").value),
-        ownership_rights: false,
-        status: "pre_registered",
-        submitted_at: new Date().toISOString(),
-        source_page: location.href
+        saved_at: new Date().toISOString()
       };
     }
 
-    function completeDetails(submission) {
-      return {
-        reference: submission.reference,
-        programme: submission.programme,
-        trial_days: submission.trial_days,
-        trial_starts_on_activation: submission.trial_starts_on_activation,
-        full_name: submission.full_name,
-        business_name: submission.business_name,
-        preferred_module: submission.preferred_module,
-        city: submission.city,
-        zone: submission.zone,
-        phone: submission.phone,
-        email: submission.email,
-        contact_preference: submission.contact_preference,
-        public_link: submission.public_link,
-        services: submission.services,
-        ownership_rights: false,
-        submitted_at: submission.submitted_at,
-        source_page: submission.source_page
-      };
+    function writeDraft(draft) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
     }
 
-    function initialPayload(submission) {
-      /*
-        `city` n'est plus envoyé comme colonne séparée.
-        Il reste conservé avec toutes les autres informations dans `notes`.
-      */
-      return {
-        full_name: submission.full_name,
-        phone: submission.phone,
-        preferred_module: submission.preferred_module,
-        notes: JSON.stringify(completeDetails(submission)),
-        status: submission.status
-      };
-    }
-
-    const ALIASES = {
-      full_name: ["name", "contact_name", "owner_name"],
-      phone: ["phone_number", "telephone", "contact_phone", "whatsapp"],
-      preferred_module: ["module", "module_code", "category", "activity_type"],
-      notes: ["details", "description", "message", "metadata", "data", "extra"],
-      status: []
-    };
-
-    function parseMissingColumn(errorBody) {
-      const message = String(errorBody?.message || "");
-      const match = message.match(/Could not find the '([^']+)' column/i);
-      return match ? match[1] : "";
-    }
-
-    function replaceUnknownColumn(payload, missingColumn, detailsText, aliasPositions) {
-      if (!Object.prototype.hasOwnProperty.call(payload, missingColumn)) {
-        return false;
-      }
-
-      const originalValue = payload[missingColumn];
-      delete payload[missingColumn];
-
-      const aliases = ALIASES[missingColumn] || [];
-      const position = aliasPositions[missingColumn] || 0;
-
-      if (position < aliases.length) {
-        const replacement = aliases[position];
-        aliasPositions[missingColumn] = position + 1;
-        payload[replacement] =
-          missingColumn === "notes" ? detailsText : originalValue;
-
-        /*
-          Le nouveau nom devient lui-même traçable pour pouvoir tester
-          l'alias suivant s'il est également absent.
-        */
-        ALIASES[replacement] = aliases.slice(position + 1);
-        return true;
-      }
-
-      /*
-        `status` est facultatif pour le formulaire.
-        Les autres informations restent toutes présentes dans la colonne
-        de détails si cette dernière a été acceptée.
-      */
-      return true;
-    }
-
-    async function postPayload(payload) {
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
-        method: "POST",
-        headers: {
-          "apikey": SUPABASE_ANON_KEY,
-          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-          "Content-Type": "application/json",
-          "Prefer": "return=minimal"
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const raw = await response.text().catch(() => "");
-      let body = null;
-
+    function readDraft() {
       try {
-        body = raw ? JSON.parse(raw) : null;
-      } catch {
-        body = { message: raw };
-      }
-
-      return { response, body };
-    }
-
-    async function sendSubmission(submission) {
-      const payload = initialPayload(submission);
-      const detailsText = JSON.stringify(completeDetails(submission));
-      const aliasPositions = {};
-      const maxAttempts = 18;
-
-      for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-        if (Object.keys(payload).length === 0) {
-          throw new Error("Aucune colonne compatible n’a été trouvée dans la table partners.");
-        }
-
-        console.info(`Tentative Supabase ${attempt}`, Object.keys(payload));
-        const { response, body } = await postPayload(payload);
-
-        if (response.ok) {
-          console.info("Demande enregistrée avec les colonnes :", Object.keys(payload));
-          return;
-        }
-
-        if (body?.code === "PGRST204") {
-          const missingColumn = parseMissingColumn(body);
-
-          if (missingColumn && Object.prototype.hasOwnProperty.call(payload, missingColumn)) {
-            console.warn(`Colonne absente ignorée : ${missingColumn}`);
-            replaceUnknownColumn(payload, missingColumn, detailsText, aliasPositions);
-            continue;
-          }
-        }
-
-        const message = body?.message || `Erreur HTTP ${response.status}`;
-        const hint = body?.hint ? ` Conseil : ${body.hint}` : "";
-        throw new Error(`Réception impossible (${response.status}). ${message}.${hint}`);
-      }
-
-      throw new Error("Trop de tentatives d’adaptation de la table partners.");
-    }
-
-    async function retryPending() {
-      const raw = localStorage.getItem(PENDING_KEY);
-
-      if (!raw) {
-        showStatus("error", "Aucune demande en attente sur cet appareil.");
-        return;
-      }
-
-      button.disabled = true;
-
-      try {
-        const submission = JSON.parse(raw);
-        await sendSubmission(submission);
-        localStorage.removeItem(PENDING_KEY);
-        showStatus(
-          "success",
-          `Demande reçue. Référence : ${submission.reference}. DIGIYLYFE vérifiera les informations avant de vous recontacter.`
-        );
-        form.reset();
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
       } catch (error) {
-        console.error(error);
-        showStatus(
-          "error",
-          "La demande n’a pas encore pu être transmise : " +
-          (error.message || "erreur inconnue"),
-          true
-        );
-      } finally {
-        button.disabled = false;
+        console.error("Brouillon illisible :", error);
+        return null;
       }
     }
 
-    form.addEventListener("submit", async (event) => {
+    function clearDraft() {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    function fillForm(draft) {
+      if (!draft) return;
+
+      document.getElementById("fullName").value = draft.full_name || "";
+      document.getElementById("businessName").value = draft.business_name || "";
+      document.getElementById("module").value = draft.module_code || "";
+      document.getElementById("city").value = draft.city || "";
+      document.getElementById("zone").value = draft.zone || "";
+      document.getElementById("phone").value = draft.phone || "";
+      document.getElementById("email").value = draft.email || "";
+      document.getElementById("contactPreference").value = draft.contact_preference || "";
+      document.getElementById("publicLink").value = draft.public_link || "";
+      document.getElementById("services").value = draft.services || "";
+    }
+
+    function makeMessage(draft) {
+      const lines = [
+        "DEMANDE PARTENAIRE PILOTE DIGIYLYFE",
+        "",
+        `Référence : ${draft.reference}`,
+        `Nom public / responsable : ${draft.full_name}`,
+        `Nom de l’activité : ${draft.business_name || "Non indiqué"}`,
+        `Module : ${draft.module_label || draft.module_code}`,
+        `Ville : ${draft.city}`,
+        `Zone d’activité : ${draft.zone || "Non indiquée"}`,
+        `Téléphone professionnel : ${draft.phone}`,
+        `E-mail : ${draft.email || "Non indiqué"}`,
+        `Contact préféré : ${draft.contact_label || draft.contact_preference}`,
+        `Page publique existante : ${draft.public_link || "Non indiquée"}`,
+        "",
+        "Services :",
+        draft.services,
+        "",
+        "Je demande à participer au programme pilote DIGIYLYFE.",
+        "Je comprends que les 30 jours commencent uniquement à l’activation réelle de ma fiche.",
+        "Je comprends que cette participation ne donne aucune part de propriété ni aucun pouvoir de décision dans DIGIYLYFE.",
+        "",
+        "Fiche personnalisée · Carte digitale · QR personnel · Contact direct · 0 % de commission DIGIY"
+      ];
+
+      return lines.join("\n");
+    }
+
+    function buildSmsHref(message) {
+      const separator = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? "&" : "?";
+      return `sms:${DIGIY_SMS_NUMBER}${separator}body=${encodeURIComponent(message)}`;
+    }
+
+    function prepareReview(draft) {
+      const message = makeMessage(draft);
+      preparedMessage.value = message;
+      smsLink.href = buildSmsHref(message);
+      reviewPanel.hidden = false;
+      reviewPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      showStatus(
+        "success",
+        "Votre demande est prête. Elle est enregistrée uniquement sur cet appareil jusqu’à son envoi par SMS."
+      );
+    }
+
+    form.addEventListener("input", () => {
+      const draft = collectDraft();
+      writeDraft(draft);
+    });
+
+    form.addEventListener("submit", (event) => {
       event.preventDefault();
 
       if (clean(document.getElementById("companyWebsite").value)) {
@@ -557,41 +473,59 @@
         return;
       }
 
-      const submission = buildSubmission();
-      button.disabled = true;
-      button.textContent = "Envoi en cours…";
-      showStatus("success", "Transmission de votre demande…");
+      const draft = collectDraft();
+      writeDraft(draft);
+      prepareReview(draft);
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      const message = preparedMessage.value;
 
       try {
-        await sendSubmission(submission);
-        localStorage.removeItem(PENDING_KEY);
-        showStatus(
-          "success",
-          `Votre demande a bien été reçue. Référence : ${submission.reference}. Les 30 jours commenceront uniquement après activation de votre fiche.`
-        );
-        form.reset();
+        await navigator.clipboard.writeText(message);
+        showStatus("success", "Demande copiée. Vous pouvez la coller dans un SMS.");
       } catch (error) {
-        console.error(error);
-        localStorage.setItem(PENDING_KEY, JSON.stringify(submission));
-        showStatus(
-          "error",
-          "La demande n’a pas pu être transmise pour le moment : " +
-          (error.message || "erreur inconnue") +
-          " Elle reste conservée sur cet appareil.",
-          true
-        );
-      } finally {
-        button.disabled = false;
-        button.textContent = "Envoyer ma demande";
+        preparedMessage.focus();
+        preparedMessage.select();
+        showStatus("error", "Copie automatique impossible. Le texte est sélectionné : utilisez Copier.");
       }
     });
 
-    if (localStorage.getItem(PENDING_KEY)) {
+    clearBtn.addEventListener("click", () => {
+      clearDraft();
+      form.reset();
+      preparedMessage.value = "";
+      reviewPanel.hidden = true;
+      statusBox.className = "status";
+      statusBox.textContent = "";
+      showStatus("success", "Le brouillon a été effacé de cet appareil.");
+    });
+
+    smsLink.addEventListener("click", () => {
       showStatus(
-        "error",
-        "Une demande précédente est encore en attente d’envoi sur cet appareil.",
-        true
+        "success",
+        "L’application SMS va s’ouvrir avec la demande adressée à DIGIYLYFE au +221 77 134 28 89."
       );
+    });
+
+    const savedDraft = readDraft();
+    if (savedDraft) {
+      fillForm(savedDraft);
+
+      if (
+        savedDraft.full_name &&
+        savedDraft.module_code &&
+        savedDraft.city &&
+        savedDraft.phone &&
+        savedDraft.services
+      ) {
+        prepareReview(savedDraft);
+      } else {
+        showStatus(
+          "success",
+          "Un brouillon local a été retrouvé sur cet appareil. Complétez-le puis préparez la demande."
+        );
+      }
     }
   </script>
 </body>
