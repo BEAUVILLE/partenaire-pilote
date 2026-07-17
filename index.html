@@ -300,21 +300,20 @@
     /*
       Réception des demandes :
       - Projet Supabase DIGIY existant
-      - Table publique attendue : partners
-      - La page lit le schéma PostgREST avant l'envoi et utilise uniquement
-        les colonnes réellement présentes dans la table.
+      - Table : partners
+      - Aucun appel au schéma OpenAPI : certains projets refusent cette lecture en 401.
+      - En cas de colonne inconnue PGRST204, la page adapte automatiquement
+        le nom de la colonne puis recommence l'envoi.
       - Aucune API payante ni bibliothèque externe.
     */
     const SUPABASE_URL = "https://wesqmwjjtsefyjnluosj.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
     const TABLE = "partners";
-    const PENDING_KEY = "digiy_pilot_pending_v2";
+    const PENDING_KEY = "digiy_pilot_pending_v3";
 
     const form = document.getElementById("pilotForm");
     const button = document.getElementById("submitBtn");
     const statusBox = document.getElementById("statusBox");
-
-    let cachedTableSchema = null;
 
     function clean(value) {
       return String(value || "").trim();
@@ -370,77 +369,8 @@
       };
     }
 
-    async function getTableSchema() {
-      if (cachedTableSchema) return cachedTableSchema;
-
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
-        method: "GET",
-        headers: {
-          "apikey": SUPABASE_ANON_KEY,
-          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-          "Accept": "application/openapi+json"
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`Lecture du schéma impossible (${response.status}).`);
-      }
-
-      const openApi = await response.json();
-      const schema =
-        openApi?.definitions?.[TABLE] ||
-        openApi?.components?.schemas?.[TABLE];
-
-      if (!schema || !schema.properties) {
-        throw new Error(`La table « ${TABLE} » n’est pas visible dans le schéma Supabase.`);
-      }
-
-      cachedTableSchema = schema;
-      console.info("Colonnes Supabase détectées :", Object.keys(schema.properties));
-      return schema;
-    }
-
-    function firstColumn(columns, candidates) {
-      return candidates.find(name => columns.has(name)) || "";
-    }
-
-    function valueForColumn(schema, column, value) {
-      const property = schema.properties?.[column] || {};
-      if (property.type === "object" || property.format === "json") {
-        return value;
-      }
-      return typeof value === "string" ? value : JSON.stringify(value);
-    }
-
-    function mapSubmissionToSchema(submission, schema) {
-      const columns = new Set(Object.keys(schema.properties || {}));
-      const payload = {};
-      const used = new Set();
-
-      function assign(candidates, value) {
-        if (value === undefined || value === null || value === "") return "";
-        const column = firstColumn(columns, candidates.filter(name => !used.has(name)));
-        if (!column) return "";
-        payload[column] = valueForColumn(schema, column, value);
-        used.add(column);
-        return column;
-      }
-
-      assign(["full_name", "name", "contact_name", "owner_name"], submission.full_name);
-      assign(["business_name", "company_name", "activity_name", "trade_name"], submission.business_name);
-      assign(["phone", "phone_number", "telephone", "contact_phone", "whatsapp"], submission.phone);
-      assign(["email", "contact_email", "mail"], submission.email);
-      assign(["city", "location", "locality", "town"], submission.city);
-      assign(["zone", "service_area", "coverage_area", "area", "address"], submission.zone);
-      assign(["preferred_module", "module", "module_code", "category", "activity_type"], submission.preferred_module);
-      assign(["contact_preference", "preferred_contact", "contact_channel"], submission.contact_preference);
-      assign(["public_link", "website", "source_url", "profile_url"], submission.public_link);
-      assign(["services", "service_description", "activity_description"], submission.services);
-      assign(["reference", "ref", "request_code", "code"], submission.reference);
-      assign(["source", "origin", "source_page"], submission.source_page);
-      assign(["status", "state"], submission.status);
-
-      const completeDetails = {
+    function completeDetails(submission) {
+      return {
         reference: submission.reference,
         programme: submission.programme,
         trial_days: submission.trial_days,
@@ -459,43 +389,70 @@
         submitted_at: submission.submitted_at,
         source_page: submission.source_page
       };
-
-      assign(
-        ["notes", "details", "metadata", "data", "extra", "message", "description"],
-        completeDetails
-      );
-
-      if (Object.keys(payload).length === 0) {
-        throw new Error("Aucune colonne compatible n’a été trouvée dans la table partners.");
-      }
-
-      const required = Array.isArray(schema.required) ? schema.required : [];
-      const missingRequired = required.filter(column => {
-        const property = schema.properties?.[column] || {};
-        const hasDefault = property.default !== undefined;
-        const isGenerated =
-          property.format === "uuid" ||
-          column === "id" ||
-          column === "created_at" ||
-          column === "updated_at";
-        return !Object.prototype.hasOwnProperty.call(payload, column) && !hasDefault && !isGenerated;
-      });
-
-      if (missingRequired.length) {
-        throw new Error(
-          "Colonnes obligatoires non alimentées dans partners : " +
-          missingRequired.join(", ")
-        );
-      }
-
-      console.info("Payload adapté au schéma :", Object.keys(payload));
-      return payload;
     }
 
-    async function sendSubmission(submission) {
-      const schema = await getTableSchema();
-      const payload = mapSubmissionToSchema(submission, schema);
+    function initialPayload(submission) {
+      /*
+        `city` n'est plus envoyé comme colonne séparée.
+        Il reste conservé avec toutes les autres informations dans `notes`.
+      */
+      return {
+        full_name: submission.full_name,
+        phone: submission.phone,
+        preferred_module: submission.preferred_module,
+        notes: JSON.stringify(completeDetails(submission)),
+        status: submission.status
+      };
+    }
 
+    const ALIASES = {
+      full_name: ["name", "contact_name", "owner_name"],
+      phone: ["phone_number", "telephone", "contact_phone", "whatsapp"],
+      preferred_module: ["module", "module_code", "category", "activity_type"],
+      notes: ["details", "description", "message", "metadata", "data", "extra"],
+      status: []
+    };
+
+    function parseMissingColumn(errorBody) {
+      const message = String(errorBody?.message || "");
+      const match = message.match(/Could not find the '([^']+)' column/i);
+      return match ? match[1] : "";
+    }
+
+    function replaceUnknownColumn(payload, missingColumn, detailsText, aliasPositions) {
+      if (!Object.prototype.hasOwnProperty.call(payload, missingColumn)) {
+        return false;
+      }
+
+      const originalValue = payload[missingColumn];
+      delete payload[missingColumn];
+
+      const aliases = ALIASES[missingColumn] || [];
+      const position = aliasPositions[missingColumn] || 0;
+
+      if (position < aliases.length) {
+        const replacement = aliases[position];
+        aliasPositions[missingColumn] = position + 1;
+        payload[replacement] =
+          missingColumn === "notes" ? detailsText : originalValue;
+
+        /*
+          Le nouveau nom devient lui-même traçable pour pouvoir tester
+          l'alias suivant s'il est également absent.
+        */
+        ALIASES[replacement] = aliases.slice(position + 1);
+        return true;
+      }
+
+      /*
+        `status` est facultatif pour le formulaire.
+        Les autres informations restent toutes présentes dans la colonne
+        de détails si cette dernière a été acceptée.
+      */
+      return true;
+    }
+
+    async function postPayload(payload) {
       const response = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
         method: "POST",
         headers: {
@@ -507,14 +464,58 @@
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) {
-        const detail = await response.text().catch(() => "");
-        throw new Error(`Réception impossible (${response.status}). ${detail}`.trim());
+      const raw = await response.text().catch(() => "");
+      let body = null;
+
+      try {
+        body = raw ? JSON.parse(raw) : null;
+      } catch {
+        body = { message: raw };
       }
+
+      return { response, body };
+    }
+
+    async function sendSubmission(submission) {
+      const payload = initialPayload(submission);
+      const detailsText = JSON.stringify(completeDetails(submission));
+      const aliasPositions = {};
+      const maxAttempts = 18;
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+        if (Object.keys(payload).length === 0) {
+          throw new Error("Aucune colonne compatible n’a été trouvée dans la table partners.");
+        }
+
+        console.info(`Tentative Supabase ${attempt}`, Object.keys(payload));
+        const { response, body } = await postPayload(payload);
+
+        if (response.ok) {
+          console.info("Demande enregistrée avec les colonnes :", Object.keys(payload));
+          return;
+        }
+
+        if (body?.code === "PGRST204") {
+          const missingColumn = parseMissingColumn(body);
+
+          if (missingColumn && Object.prototype.hasOwnProperty.call(payload, missingColumn)) {
+            console.warn(`Colonne absente ignorée : ${missingColumn}`);
+            replaceUnknownColumn(payload, missingColumn, detailsText, aliasPositions);
+            continue;
+          }
+        }
+
+        const message = body?.message || `Erreur HTTP ${response.status}`;
+        const hint = body?.hint ? ` Conseil : ${body.hint}` : "";
+        throw new Error(`Réception impossible (${response.status}). ${message}.${hint}`);
+      }
+
+      throw new Error("Trop de tentatives d’adaptation de la table partners.");
     }
 
     async function retryPending() {
       const raw = localStorage.getItem(PENDING_KEY);
+
       if (!raw) {
         showStatus("error", "Aucune demande en attente sur cet appareil.");
         return;
@@ -535,7 +536,8 @@
         console.error(error);
         showStatus(
           "error",
-          "La demande n’a pas encore pu être transmise : " + (error.message || "erreur inconnue"),
+          "La demande n’a pas encore pu être transmise : " +
+          (error.message || "erreur inconnue"),
           true
         );
       } finally {
