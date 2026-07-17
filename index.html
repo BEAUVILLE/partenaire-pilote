@@ -1,6 +1,5 @@
 <!doctype html>
-<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V2-PROPRE-20260717 -->
-<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V1-20260717 -->
+<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V4-FINAL-20260717 -->
 <html lang="fr">
 <head>
   <meta charset="utf-8">
@@ -269,7 +268,7 @@
             <div class="check" style="display:block">
               <strong style="display:block;margin-bottom:8px">Demande préparée</strong>
               <p class="help" style="margin:0 0 12px">
-                Vérifiez le texte ci-dessous. Il reste uniquement sur votre appareil tant que vous ne l’envoyez pas.
+                Vérifiez le SMS court ci-dessous. Les informations complètes restent uniquement dans le brouillon de cet appareil.
               </p>
               <textarea id="preparedMessage" readonly style="min-height:220px"></textarea>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
@@ -311,7 +310,7 @@
   <script>
     "use strict";
 
-    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V2-PROPRE-20260717";
+    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V4-FINAL-20260717";
     const DIGIY_SMS_NUMBER = "+221771342889";
     const STORAGE_KEY = "digiy_pilot_draft_v1";
 
@@ -320,7 +319,6 @@
     console.info("Aucune base externe. Aucune API payante.");
 
     const form = document.getElementById("pilotForm");
-    const submitBtn = document.getElementById("submitBtn");
     const statusBox = document.getElementById("statusBox");
     const reviewPanel = document.getElementById("reviewPanel");
     const preparedMessage = document.getElementById("preparedMessage");
@@ -328,8 +326,29 @@
     const copyBtn = document.getElementById("copyBtn");
     const clearBtn = document.getElementById("clearBtn");
 
+    const IS_IOS_OR_IPADOS =
+      /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+    const MOBILE_SMS_SUPPORTED =
+      /Android|Windows Phone|Mobile/i.test(navigator.userAgent) ||
+      IS_IOS_OR_IPADOS;
+
     function clean(value) {
       return String(value || "").trim();
+    }
+
+    function gsmSafe(value) {
+      return clean(value)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[’‘]/g, "'")
+        .replace(/[“”]/g, '"')
+        .replace(/[–—]/g, "-")
+        .replace(/·/g, "-")
+        .replace(/[^\x20-\x7E\n]/g, "")
+        .replace(/[ \t]+/g, " ")
+        .trim();
     }
 
     function showStatus(type, message) {
@@ -400,58 +419,68 @@
       document.getElementById("services").value = draft.services || "";
     }
 
-    function makeMessage(draft) {
+    function makeShortSms(draft) {
+      const name = gsmSafe(draft.full_name).slice(0, 45);
+      const activity = gsmSafe(draft.business_name).slice(0, 45);
+      const moduleCode = gsmSafe(draft.module_code).slice(0, 15);
+      const city = gsmSafe(draft.city).slice(0, 30);
+      const phone = gsmSafe(draft.phone).slice(0, 24);
+
+      const contact = gsmSafe(draft.contact_label || draft.contact_preference).slice(0, 24);
+
       const lines = [
-        "DEMANDE PARTENAIRE PILOTE DIGIYLYFE",
-        "",
-        `Référence : ${draft.reference}`,
-        `Nom public / responsable : ${draft.full_name}`,
-        `Nom de l’activité : ${draft.business_name || "Non indiqué"}`,
-        `Module : ${draft.module_label || draft.module_code}`,
-        `Ville : ${draft.city}`,
-        `Zone d’activité : ${draft.zone || "Non indiquée"}`,
-        `Téléphone professionnel : ${draft.phone}`,
-        `E-mail : ${draft.email || "Non indiqué"}`,
-        `Contact préféré : ${draft.contact_label || draft.contact_preference}`,
-        `Page publique existante : ${draft.public_link || "Non indiquée"}`,
-        "",
-        "Services :",
-        draft.services,
-        "",
-        "Je demande à participer au programme pilote DIGIYLYFE.",
-        "Je comprends que les 30 jours commencent uniquement à l’activation réelle de ma fiche.",
-        "Je comprends que cette participation ne donne aucune part de propriété ni aucun pouvoir de décision dans DIGIYLYFE.",
-        "",
-        "Fiche personnalisée · Carte digitale · QR personnel · Contact direct · 0 % de commission DIGIY"
-      ];
+        "DEMANDE DIGIY PILOTE",
+        `Ref: ${gsmSafe(draft.reference)}`,
+        `Nom: ${name}`,
+        activity ? `Activite: ${activity}` : "",
+        `Module: ${moduleCode}`,
+        `Ville: ${city}`,
+        `Tel: ${phone}`,
+        contact ? `Contact: ${contact}` : "",
+        "Merci de me rappeler pour finaliser ma fiche."
+      ].filter(Boolean);
 
       return lines.join("\n");
     }
 
     function buildSmsHref(message) {
-      const separator = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? "&" : "?";
+      const separator = IS_IOS_OR_IPADOS ? "&" : "?";
       return `sms:${DIGIY_SMS_NUMBER}${separator}body=${encodeURIComponent(message)}`;
     }
 
     function prepareReview(draft) {
-      const message = makeMessage(draft);
+      const message = makeShortSms(draft);
+
       preparedMessage.value = message;
       smsLink.href = buildSmsHref(message);
       reviewPanel.hidden = false;
+
+      if (MOBILE_SMS_SUPPORTED) {
+        smsLink.hidden = false;
+        copyBtn.style.gridColumn = "";
+        showStatus(
+          "success",
+          "SMS court préparé. Vérifiez le texte puis ouvrez votre application SMS."
+        );
+      } else {
+        smsLink.hidden = true;
+        copyBtn.style.gridColumn = "1 / -1";
+        showStatus(
+          "success",
+          "Vous êtes sur ordinateur. Copiez la demande puis envoyez-la depuis votre téléphone."
+        );
+      }
+
       reviewPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-      showStatus(
-        "success",
-        "Brouillon local préparé. Vérifiez le texte puis ouvrez votre application SMS."
-      );
     }
 
     form.addEventListener("input", () => {
-      const draft = collectDraft();
-      writeDraft(draft);
+      writeDraft(collectDraft());
     });
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
+
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
@@ -471,7 +500,10 @@
       } catch (error) {
         preparedMessage.focus();
         preparedMessage.select();
-        showStatus("error", "Copie automatique impossible. Le texte est sélectionné : utilisez Copier.");
+        showStatus(
+          "error",
+          "Copie automatique impossible. Le texte est sélectionné : utilisez Copier."
+        );
       }
     });
 
@@ -480,19 +512,27 @@
       form.reset();
       preparedMessage.value = "";
       reviewPanel.hidden = true;
-      statusBox.className = "status";
-      statusBox.textContent = "";
       showStatus("success", "Le brouillon a été effacé de cet appareil.");
     });
 
-    smsLink.addEventListener("click", () => {
+    smsLink.addEventListener("click", (event) => {
+      if (!MOBILE_SMS_SUPPORTED) {
+        event.preventDefault();
+        showStatus(
+          "error",
+          "Ouverture SMS non disponible sur cet ordinateur. Utilisez Copier."
+        );
+        return;
+      }
+
       showStatus(
         "success",
-        "L’application SMS va s’ouvrir avec la demande adressée à DIGIYLYFE au +221 77 134 28 89."
+        "L’application SMS va s’ouvrir avec la demande adressée à DIGIYLYFE."
       );
     });
 
     const savedDraft = readDraft();
+
     if (savedDraft) {
       fillForm(savedDraft);
 
@@ -514,3 +554,4 @@
   </script>
 </body>
 </html>
+
