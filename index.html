@@ -1,11 +1,11 @@
 <!doctype html>
-<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V4-FINAL-20260717 -->
+<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V5-GRATUIT-20260717 -->
 <html lang="fr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0b5d3b">
-  <meta name="description" content="Programme pilote DIGIYLYFE : fiche professionnelle personnalisée, carte digitale et QR personnel pendant 30 jours offerts.">
+  <meta name="description" content="Programme pilote DIGIYLYFE : fiche professionnelle personnalisée, carte digitale et QR personnel. 30 jours 100 % gratuits, aucun paiement demandé.">
   <title>DIGIYLYFE — Partenaire pilote</title>
   <style>
     :root{
@@ -68,6 +68,10 @@
       font-weight:800;box-shadow:0 6px 20px rgba(20,50,35,.05)
     }
     .promise span{display:block;color:var(--green);font-size:1.1rem;margin-bottom:3px}
+    .promise .promise-free{
+      grid-column:1/-1;background:var(--soft);border-color:#cbe4d5;color:var(--green-dark);
+      font-weight:900
+    }
     .fine{font-size:.86rem;line-height:1.55;color:var(--muted)}
     .form-card{
       background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
@@ -151,7 +155,7 @@
 
   <main class="wrap hero">
     <section>
-      <div class="kicker">Programme partenaire pilote · 30 jours offerts</div>
+      <div class="kicker">Programme partenaire pilote · 30 jours gratuits</div>
       <h1>Votre présence professionnelle. Votre QR. Vos contacts directs.</h1>
       <p class="lead">
         DIGIYLYFE ouvre son programme pilote à tous les professionnels :
@@ -160,6 +164,7 @@
       </p>
 
       <div class="promise">
+        <div class="promise-free"><span>✓</span>30 jours 100 % gratuits — aucun paiement demandé</div>
         <div><span>✓</span>Fiche professionnelle personnalisée</div>
         <div><span>✓</span>Carte de visite digitale</div>
         <div><span>✓</span>QR personnel vers votre fiche</div>
@@ -169,7 +174,7 @@
       <p class="fine">
         Les 30 jours commencent uniquement lorsque votre fiche est réellement activée.
         L’inscription est une demande de participation : aucune fiche n’est publiée automatiquement et aucune donnée n’est envoyée vers une base externe.
-        Après l’essai, vous choisissez de continuer avec une offre DIGIYLYFE ou de mettre la fiche en pause.
+        Après l’essai, vous choisissez librement : continuer avec un abonnement fixe et transparent — jamais de commission — ou mettre la fiche en pause. Rien n’est facturé sans votre accord.
       </p>
     </section>
 
@@ -262,6 +267,9 @@
 
           <div class="field full">
             <button class="btn" id="submitBtn" type="submit">Préparer ma demande</button>
+            <p class="help" style="text-align:center;margin:10px 0 0">
+              Aucune carte bancaire. Aucun engagement. Vous décidez après l’essai.
+            </p>
             <div class="status" id="statusBox" role="status" aria-live="polite"></div>
           </div>
           <div class="field full" id="reviewPanel" hidden>
@@ -310,7 +318,7 @@
   <script>
     "use strict";
 
-    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V4-FINAL-20260717";
+    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V5-GRATUIT-20260717";
     const DIGIY_SMS_NUMBER = "+221771342889";
     const STORAGE_KEY = "digiy_pilot_draft_v1";
 
