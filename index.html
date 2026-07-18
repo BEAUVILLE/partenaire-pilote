@@ -296,6 +296,33 @@
     </section>
   </main>
 
+  <!-- CARTE OFFICIELLE DIGIYLYFE 9:16 -->
+  <section class="wrap digiyOfficialCard" aria-labelledby="digiyCardTitle">
+    <div class="digiyOfficialCardText">
+      <span class="digiyCardKicker">La preuve par le QR</span>
+      <h2 id="digiyCardTitle">Le QR DIGIYLYFE ouvre le Club.<br>Votre QR ouvrira votre fiche-maison.</h2>
+      <p>Cette carte officielle est téléchargeable, imprimable et partageable. Chaque partenaire reçoit ensuite sa propre carte et son QR personnel vers sa fiche professionnelle.</p>
+      <div class="digiyCardActions">
+        <a href="./CARTE-OFFICIELLE-DIGIYLYFE-QR-9x16.png" target="_blank" rel="noopener">Ouvrir la carte</a>
+        <a href="./CARTE-OFFICIELLE-DIGIYLYFE-QR-9x16.png" download>Télécharger</a>
+        <button type="button" id="shareDigiyCard">Partager</button>
+      </div>
+    </div>
+    <img src="./CARTE-OFFICIELLE-DIGIYLYFE-QR-9x16.png" alt="Carte officielle verticale DIGIYLYFE avec QR vers digiylyfe.com" loading="lazy">
+  </section>
+
+  <style>
+    .digiyOfficialCard{margin:28px auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,380px);gap:28px;align-items:center;padding:26px;border:1px solid rgba(246,196,83,.42);border-radius:24px;background:rgba(7,31,24,.96);color:#fff}
+    .digiyOfficialCard img{display:block;width:100%;height:auto;max-height:680px;object-fit:contain;border-radius:18px;box-shadow:0 18px 42px rgba(0,0,0,.28)}
+    .digiyCardKicker{display:inline-block;color:#f6c453;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+    .digiyOfficialCard h2{margin:10px 0 12px;font-size:clamp(1.45rem,3vw,2.15rem);line-height:1.12;color:#fff}
+    .digiyOfficialCard p{margin:0;color:#dbe9e4;line-height:1.6}
+    .digiyCardActions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .digiyCardActions a,.digiyCardActions button{border:0;border-radius:999px;padding:11px 16px;font:inherit;font-weight:900;cursor:pointer;text-decoration:none;background:#f6c453;color:#08271e}
+    .digiyCardActions a:first-child{background:#fff}
+    @media(max-width:760px){.digiyOfficialCard{grid-template-columns:1fr;padding:17px}.digiyOfficialCardText{order:2}.digiyOfficialCard img{order:1;max-height:620px}}
+  </style>
+
   <section class="wrap legal">
     <div>
       <b>Activation contrôlée</b>
@@ -317,6 +344,24 @@
 
   <script>
     "use strict";
+
+    document.getElementById("shareDigiyCard")?.addEventListener("click", async () => {
+      const shareData = {
+        title: "DIGIYLYFE — Le Club digital des entrepreneurs du terrain",
+        text: "Découvrez DIGIYLYFE : QR direct, contact direct, paiement direct, 0 % de commission.",
+        url: "https://digiylyfe.com/"
+      };
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch (_) {}
+      } else {
+        try {
+          await navigator.clipboard.writeText(shareData.url);
+          alert("Lien DIGIYLYFE copié.");
+        } catch (_) {
+          window.prompt("Copiez le lien DIGIYLYFE :", shareData.url);
+        }
+      }
+    });
 
     const BUILD = "DIGIY-PILOT-LOCAL-SMS-V7-PRIX-TRANSPARENT-20260717";
     const DIGIY_SMS_NUMBER = "+221771342889";
@@ -562,4 +607,5 @@
   </script>
 </body>
 </html>
+
 
