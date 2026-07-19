@@ -1,12 +1,19 @@
 <!doctype html>
-<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V7-PRIX-TRANSPARENT-20260717 -->
+<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V8-PRESENCE-DURABLE-20260719 -->
 <html lang="fr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0b5d3b">
-  <meta name="description" content="Programme pilote DIGIYLYFE : fiche professionnelle personnalisée, carte digitale et QR personnel. 30 jours 100 % gratuits, aucun paiement demandé.">
-  <title>DIGIYLYFE — Partenaire pilote</title>
+  <meta name="description" content="Programme pilote DIGIYLYFE : activez une fiche professionnelle durable, une carte digitale et un QR personnel. 30 jours offerts pour tester votre présence, sans paiement ni reconduction automatique.">
+  <title>DIGIYLYFE — Activez votre présence professionnelle pilote</title>
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://partenaire-pilote.digiylyfe.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://partenaire-pilote.digiylyfe.com/">
+  <meta property="og:title" content="DIGIYLYFE — Votre présence professionnelle pilote">
+  <meta property="og:description" content="Une fiche professionnelle durable, une carte digitale et un QR personnel. 30 jours offerts pour activer et tester votre présence.">
+  <meta property="og:image" content="https://partenaire-pilote.digiylyfe.com/CARTE-OFFICIELLE-DIGIYLYFE-QR-9x16(1).png">
   <style>
     :root{
       --green:#0b6b45;
@@ -72,6 +79,15 @@
       grid-column:1/-1;background:var(--soft);border-color:#cbe4d5;color:var(--green-dark);
       font-weight:900
     }
+    .presencePath{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0
+    }
+    .presencePath article{
+      background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;
+      box-shadow:0 6px 20px rgba(20,50,35,.05)
+    }
+    .presencePath strong{display:block;color:var(--green-dark);font-size:.9rem;line-height:1.25}
+    .presencePath span{display:block;margin-top:6px;color:var(--muted);font-size:.8rem;line-height:1.45}
     .fine{font-size:.86rem;line-height:1.55;color:var(--muted)}
     .form-card{
       background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
@@ -133,7 +149,7 @@
       .nav{align-items:flex-start}
       .pill{font-size:.72rem;padding:7px 9px}
       .hero{padding-top:18px;gap:22px}
-      .promise,.grid,.legal{grid-template-columns:1fr}
+      .promise,.presencePath,.grid,.legal{grid-template-columns:1fr}
       .full{grid-column:auto}
       form{padding:17px}
       .form-head{padding:20px 17px}
@@ -155,33 +171,50 @@
 
   <main class="wrap hero">
     <section>
-      <div class="kicker">Programme partenaire pilote · 30 jours gratuits</div>
+      <div class="kicker">Programme partenaire pilote · 30 jours de test offerts</div>
       <h1>Votre présence professionnelle. Votre QR. Vos contacts directs.</h1>
       <p class="lead">
-        DIGIYLYFE ouvre son programme pilote à tous les professionnels :
-        chauffeurs, restaurants, boutiques, artisans, hébergements, recruteurs,
-        activités touristiques et autres métiers de terrain.
+        DIGIYLYFE crée une adresse professionnelle claire qui rassemble vos services,
+        vos photos, vos vidéos et vos moyens de contact. Vous partagez ensuite cette fiche
+        sur WhatsApp, TikTok, YouTube, par SMS ou avec votre carte imprimée :
+        les réseaux diffusent, votre fiche reste accessible.
       </p>
 
       <div class="promise">
-        <div class="promise-free"><span>✓</span>30 jours 100 % gratuits — aucun paiement demandé</div>
-        <div class="promise-free"><span>✓</span>Après l’essai : offres à partir de 19 900 FCFA / mois selon le module choisi</div>
+        <div class="promise-free"><span>✓</span>30 jours offerts pour activer et tester votre présence — aucun paiement demandé</div>
+        <div class="promise-free"><span>✓</span>Après le pilote, vous décidez librement : continuer à partir de 19 900 FCFA / mois selon le module choisi</div>
         <div><span>✓</span>Fiche professionnelle personnalisée</div>
         <div><span>✓</span>Carte de visite digitale</div>
         <div><span>✓</span>QR personnel vers votre fiche</div>
         <div><span>✓</span>0 % de commission DIGIY</div>
       </div>
 
+      <div class="presencePath" aria-label="Comment fonctionne la présence DIGIYLYFE">
+        <article>
+          <strong>1. Les réseaux diffusent</strong>
+          <span>WhatsApp, TikTok et YouTube font circuler vos photos et vidéos, mais les publications descendent dans les fils.</span>
+        </article>
+        <article>
+          <strong>2. Votre fiche rassemble</strong>
+          <span>Vos services, contenus et contacts restent réunis à la même adresse professionnelle.</span>
+        </article>
+        <article>
+          <strong>3. Votre QR reconnecte</strong>
+          <span>Chaque partage numérique ou carte imprimée ramène le client vers votre fiche et votre contact direct.</span>
+        </article>
+      </div>
+
       <p class="fine">
         Les 30 jours commencent uniquement lorsque votre fiche est réellement activée.
-        L’inscription est une demande de participation : aucune fiche n’est publiée automatiquement et aucune donnée n’est envoyée vers une base externe.
-        Après l’essai, vous choisissez librement : continuer avec une offre à partir de 19 900 FCFA par mois selon le module choisi — JE LOUE · LOC démarre à 26 000 FCFA par mois — ou mettre la fiche en pause. Aucune reconduction automatique et rien n’est facturé sans votre accord.
+        Ce pilote sert à tester une présence conçue pour durer, pas une publication éphémère dans un fil d’actualité.
+        L’inscription reste une demande de participation : aucune fiche n’est publiée automatiquement et aucune donnée n’est envoyée vers une base externe.
+        À la fin du pilote, vous choisissez librement : continuer avec une offre à partir de 19 900 FCFA par mois selon le module choisi — JE LOUE · LOC démarre à 26 000 FCFA par mois — ou mettre la fiche en pause. Aucune reconduction automatique et rien n’est facturé sans votre accord.
       </p>
     </section>
 
     <section class="form-card" aria-labelledby="formTitle">
       <div class="form-head">
-        <h2 id="formTitle">Demander ma place pilote</h2>
+        <h2 id="formTitle">Demander mon activation pilote</h2>
         <p>Quelques informations suffisent. La page prépare votre demande, puis vous l’envoyez directement par SMS à DIGIYLYFE.</p>
       </div>
 
@@ -299,9 +332,9 @@
   <!-- CARTE OFFICIELLE DIGIYLYFE 9:16 -->
   <section class="wrap digiyOfficialCard" aria-labelledby="digiyCardTitle">
     <div class="digiyOfficialCardText">
-      <span class="digiyCardKicker">La preuve par le QR</span>
-      <h2 id="digiyCardTitle">Le QR DIGIYLYFE ouvre le Club.<br>Votre QR ouvrira votre fiche-maison.</h2>
-      <p>Cette carte officielle est téléchargeable, imprimable et partageable. Chaque partenaire reçoit ensuite sa propre carte et son QR personnel vers sa fiche professionnelle.</p>
+      <span class="digiyCardKicker">Une adresse stable derrière chaque partage</span>
+      <h2 id="digiyCardTitle">Le QR DIGIYLYFE ouvre le Club.<br>Votre QR ouvrira votre fiche professionnelle.</h2>
+      <p>Les réseaux et les cartes font circuler votre message. La fiche DIGIY rassemble vos services, vos photos, vos vidéos et vos contacts à une adresse claire, partageable et retrouvable. Chaque partenaire reçoit sa propre carte et son QR personnel vers cette fiche.</p>
       <div class="digiyCardActions">
         <a href="./CARTE-OFFICIELLE-DIGIYLYFE-QR-9x16(1).png" target="_blank" rel="noopener">Ouvrir la carte</a>
         <a href="./CARTE-OFFICIELLE-DIGIYLYFE-QR-9x16(1).png" download>Télécharger</a>
@@ -329,12 +362,12 @@
       DIGIYLYFE vérifie les informations avant toute publication.
     </div>
     <div>
-      <b>Essai réel</b>
-      Les 30 jours démarrent à l’activation de la fiche, pas au dépôt de la demande.
+      <b>30 jours pour mesurer</b>
+      Le pilote démarre à l’activation de la fiche et sert à vérifier son utilité réelle sur le terrain.
     </div>
     <div>
-      <b>Relation directe</b>
-      La présence ne garantit pas un nombre de clients, mais facilite le contact direct.
+      <b>Présence organisée</b>
+      Les réseaux diffusent vos contenus ; DIGIY les rassemble dans une fiche claire qui facilite le contact direct.
     </div>
   </section>
 
@@ -348,7 +381,7 @@
     document.getElementById("shareDigiyCard")?.addEventListener("click", async () => {
       const shareData = {
         title: "DIGIYLYFE — Le Club digital des entrepreneurs du terrain",
-        text: "Découvrez DIGIYLYFE : QR direct, contact direct, paiement direct, 0 % de commission.",
+        text: "Découvrez DIGIYLYFE : une adresse professionnelle, un QR direct, des contacts directs et 0 % de commission.",
         url: "https://digiylyfe.com/"
       };
       if (navigator.share) {
@@ -363,7 +396,7 @@
       }
     });
 
-    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V7-PRIX-TRANSPARENT-20260717";
+    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V8-PRESENCE-DURABLE-20260719";
     const DIGIY_SMS_NUMBER = "+221771342889";
     const STORAGE_KEY = "digiy_pilot_draft_v1";
 
@@ -607,6 +640,10 @@
   </script>
 </body>
 </html>
+
+
+
+
 
 
 
