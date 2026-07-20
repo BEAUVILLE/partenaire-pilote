@@ -412,11 +412,12 @@
     .qrSupportCard p{margin:0 0 16px;color:var(--muted);line-height:1.55}
     .qrSupportActions{
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:repeat(3,minmax(0,1fr));
       gap:10px;
       margin-top:auto
     }
-    .qrSupportActions a{
+    .qrSupportActions a,
+    .qrSupportActions button{
       display:flex;
       align-items:center;
       justify-content:center;
@@ -425,16 +426,28 @@
       padding:10px 12px;
       text-align:center;
       text-decoration:none;
+      font:inherit;
       font-weight:900;
       line-height:1.25;
+      cursor:pointer;
       background:var(--green);
       color:#fff;
       border:1px solid var(--green)
     }
-    .qrSupportActions a:last-child{
+    .qrSupportActions a:nth-child(2){
       background:#fff;
       color:var(--green-dark);
       border-color:#bcd8c9
+    }
+    .qrSupportActions button{
+      background:var(--gold);
+      color:#08271e;
+      border-color:var(--gold)
+    }
+    .qrSupportActions button:focus-visible,
+    .qrSupportActions a:focus-visible{
+      outline:3px solid rgba(11,107,69,.22);
+      outline-offset:3px
     }
     .qrSupportNote{
       margin:16px 0 0;
@@ -483,6 +496,13 @@
             rel="noopener"
             download
           >Télécharger le PDF A6</a>
+          <button
+            type="button"
+            class="shareQrSupport"
+            data-share-title="DIGIYLYFE — Carte de communication A6"
+            data-share-text="Découvrez et partagez la carte QR officielle DIGIYLYFE pour trouver directement des professionnels locaux."
+            data-share-url="./qr-communication/DIGIYLYFE-QR-COMMUNICATION-A6-FINAL.html"
+          >Partager A6</button>
         </div>
       </article>
 
@@ -504,6 +524,13 @@
             rel="noopener"
             download
           >Télécharger le PDF A5</a>
+          <button
+            type="button"
+            class="shareQrSupport"
+            data-share-title="DIGIYLYFE — Présentoir de comptoir A5"
+            data-share-text="Découvrez et partagez le présentoir QR officiel DIGIYLYFE pour trouver directement des professionnels locaux."
+            data-share-url="./qr-communication/DIGIYLYFE-QR-PRESENTOIR-A5-FINAL.html"
+          >Partager A5</button>
         </div>
       </article>
     </div>
@@ -553,7 +580,41 @@
       }
     });
 
-    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V9-QR-SUPPORTS-20260720";
+
+    document.querySelectorAll(".shareQrSupport").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const originalLabel = button.textContent;
+        const absoluteUrl = new URL(button.dataset.shareUrl, window.location.href).href;
+        const shareData = {
+          title: button.dataset.shareTitle || "DIGIYLYFE",
+          text: button.dataset.shareText || "Découvrez ce support officiel DIGIYLYFE.",
+          url: absoluteUrl
+        };
+
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+          } catch (error) {
+            if (error?.name !== "AbortError") {
+              console.warn("Partage impossible :", error);
+            }
+          }
+          return;
+        }
+
+        try {
+          await navigator.clipboard.writeText(absoluteUrl);
+          button.textContent = "Lien copié";
+          setTimeout(() => {
+            button.textContent = originalLabel;
+          }, 1800);
+        } catch (_) {
+          window.prompt("Copiez ce lien DIGIYLYFE :", absoluteUrl);
+        }
+      });
+    });
+
+    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V10-QR-PARTAGE-20260720";
     const DIGIY_SMS_NUMBER = "+221771342889";
     const STORAGE_KEY = "digiy_pilot_draft_v1";
 
@@ -797,6 +858,13 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 
