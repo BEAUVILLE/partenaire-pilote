@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V9-QR-SUPPORTS-20260720 -->
+<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V11-CARTE-PILOTE-CLIQUABLE-20260720 -->
 <html lang="fr">
 <head>
   <meta charset="utf-8">
@@ -11,9 +11,11 @@
   <link rel="canonical" href="https://partenaire-pilote.digiylyfe.com/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://partenaire-pilote.digiylyfe.com/">
-  <meta property="og:title" content="DIGIYLYFE — Votre présence professionnelle pilote">
-  <meta property="og:description" content="Une fiche professionnelle durable, une carte digitale et un QR personnel. 30 jours offerts pour activer et tester votre présence.">
-  <meta property="og:image" content="https://partenaire-pilote.digiylyfe.com/CARTE-OFFICIELLE-DIGIYLYFE-QR-9x16(1).png">
+  <meta property="og:title" content="DIGIYLYFE — 50 activations pilotes">
+  <meta property="og:description" content="30 jours offerts pour activer et tester votre présence professionnelle. Aucun paiement demandé.">
+  <meta property="og:image" content="https://partenaire-pilote.digiylyfe.com/ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png">
+  <meta name="twitter:card" content="summary_large_image">
+
   <style>
     :root{
       --green:#0b6b45;
@@ -37,8 +39,8 @@
       font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       color:var(--ink);
       background:
-        radial-gradient(circle at 10% 0%, rgba(242,201,76,.22), transparent 28rem),
-        radial-gradient(circle at 100% 12%, rgba(11,107,69,.14), transparent 30rem),
+        radial-gradient(circle at 10% 0%,rgba(242,201,76,.22),transparent 28rem),
+        radial-gradient(circle at 100% 12%,rgba(11,107,69,.14),transparent 30rem),
         var(--bg);
     }
     button,input,select,textarea{font:inherit}
@@ -50,7 +52,7 @@
     .brand{display:flex;align-items:center;gap:12px;font-weight:900}
     .mark{
       width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
-      background:var(--green);color:white;box-shadow:0 10px 24px rgba(11,107,69,.24)
+      background:var(--green);color:#fff;box-shadow:0 10px 24px rgba(11,107,69,.24)
     }
     .brand small{display:block;color:var(--muted);font-weight:700;margin-top:2px}
     .pill{
@@ -67,21 +69,16 @@
     }
     h1{font-size:clamp(2.2rem,6vw,4.65rem);line-height:.98;letter-spacing:-.055em;margin:18px 0}
     .lead{font-size:clamp(1rem,2vw,1.22rem);line-height:1.65;color:#475467;max-width:700px}
-    .promise{
-      margin:22px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px
-    }
+    .promise{margin:22px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     .promise div{
       background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px;
       font-weight:800;box-shadow:0 6px 20px rgba(20,50,35,.05)
     }
     .promise span{display:block;color:var(--green);font-size:1.1rem;margin-bottom:3px}
     .promise .promise-free{
-      grid-column:1/-1;background:var(--soft);border-color:#cbe4d5;color:var(--green-dark);
-      font-weight:900
+      grid-column:1/-1;background:var(--soft);border-color:#cbe4d5;color:var(--green-dark);font-weight:900
     }
-    .presencePath{
-      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0
-    }
+    .presencePath{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
     .presencePath article{
       background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;
       box-shadow:0 6px 20px rgba(20,50,35,.05)
@@ -93,13 +90,10 @@
       background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
       box-shadow:var(--shadow);overflow:hidden
     }
-    .form-head{
-      padding:22px 22px 18px;background:linear-gradient(135deg,var(--green-dark),var(--green));
-      color:white
-    }
+    .form-head{padding:22px 22px 18px;background:linear-gradient(135deg,var(--green-dark),var(--green));color:#fff}
     .form-head h2{margin:0 0 6px;font-size:1.45rem}
     .form-head p{margin:0;color:#dcf4e8;line-height:1.5}
-    form{padding:22px}
+    form{padding:22px;scroll-margin-top:18px}
     .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
     .field{display:flex;flex-direction:column;gap:7px}
     .full{grid-column:1/-1}
@@ -108,9 +102,7 @@
       width:100%;border:1px solid #cfd8d3;border-radius:12px;padding:11px 12px;
       color:var(--ink);background:#fff;outline:none
     }
-    input:focus,select:focus,textarea:focus{
-      border-color:var(--green);box-shadow:0 0 0 3px rgba(11,107,69,.12)
-    }
+    input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(11,107,69,.12)}
     textarea{min-height:104px;resize:vertical}
     .help{font-size:.76rem;color:var(--muted);line-height:1.45}
     .check{
@@ -121,27 +113,129 @@
     .check label{font-weight:650;line-height:1.5}
     .btn{
       width:100%;border:0;border-radius:14px;padding:14px 18px;font-weight:900;
-      background:var(--green);color:white;cursor:pointer;box-shadow:0 10px 24px rgba(11,107,69,.22)
+      background:var(--green);color:#fff;cursor:pointer;box-shadow:0 10px 24px rgba(11,107,69,.22)
     }
     .btn:hover{background:var(--green-dark)}
-    .btn:disabled{opacity:.62;cursor:wait}
-    .status{
-      display:none;margin-top:14px;border-radius:14px;padding:13px 14px;
-      font-size:.9rem;line-height:1.5
-    }
+    .status{display:none;margin-top:14px;border-radius:14px;padding:13px 14px;font-size:.9rem;line-height:1.5}
     .status.show{display:block}
     .status.success{background:#ecfdf3;color:#067647;border:1px solid #abefc6}
     .status.error{background:#fff1f0;color:var(--danger);border:1px solid #f4c7c3}
-    .retry{margin-top:10px;background:#fff;color:var(--danger);border:1px solid #e6b9b4;box-shadow:none}
+
+    .pilotCampaign{
+      margin:12px auto 28px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(280px,430px);
+      gap:28px;
+      align-items:center;
+      padding:28px;
+      border:1px solid rgba(242,201,76,.55);
+      border-radius:26px;
+      background:linear-gradient(135deg,#071f18,#0b5d3b);
+      color:#fff;
+      box-shadow:0 20px 54px rgba(7,31,24,.2)
+    }
+    .pilotCampaignKicker{
+      display:inline-block;color:var(--gold);font-weight:950;text-transform:uppercase;
+      letter-spacing:.08em;font-size:.8rem
+    }
+    .pilotCampaign h2{margin:11px 0 12px;font-size:clamp(1.65rem,3.6vw,2.65rem);line-height:1.08}
+    .pilotCampaign p{margin:0;color:#dceee7;line-height:1.65}
+    .pilotCampaign strong{color:#fff}
+    .pilotCampaignActions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:20px}
+    .pilotCampaignActions a,.pilotCampaignActions button{
+      display:flex;align-items:center;justify-content:center;min-height:48px;padding:11px 14px;
+      border:0;border-radius:14px;text-decoration:none;text-align:center;font:inherit;font-weight:900;
+      cursor:pointer;background:var(--gold);color:#08271e
+    }
+    .pilotCampaignActions a:first-child{background:#fff}
+    .pilotCampaignActions a:nth-child(3){background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5)}
+    .pilotCampaignMedia{display:block;position:relative}
+    .pilotCampaignMedia img{
+      display:block;width:100%;height:auto;max-height:760px;object-fit:contain;border-radius:20px;
+      box-shadow:0 22px 54px rgba(0,0,0,.3);background:#fff
+    }
+    .pilotCampaignMedia::after{
+      content:"Cliquez pour accéder au formulaire";
+      position:absolute;left:12px;right:12px;bottom:12px;padding:11px 14px;border-radius:999px;
+      background:rgba(7,31,24,.92);color:#fff;text-align:center;font-size:.82rem;font-weight:900
+    }
+    .pilotCampaignNote{margin-top:12px!important;font-size:.84rem;color:#bdd8cd!important}
+
+    .digiyOfficialCard{
+      margin:28px auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,380px);
+      gap:28px;align-items:center;padding:26px;border:1px solid rgba(246,196,83,.42);
+      border-radius:24px;background:rgba(7,31,24,.96);color:#fff
+    }
+    .digiyOfficialCard img{
+      display:block;width:100%;height:auto;max-height:680px;object-fit:contain;
+      border-radius:18px;box-shadow:0 18px 42px rgba(0,0,0,.28)
+    }
+    .digiyCardKicker{display:inline-block;color:#f6c453;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+    .digiyOfficialCard h2{margin:10px 0 12px;font-size:clamp(1.45rem,3vw,2.15rem);line-height:1.12;color:#fff}
+    .digiyOfficialCard p{margin:0;color:#dbe9e4;line-height:1.6}
+    .digiyCardActions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .digiyCardActions a,.digiyCardActions button{
+      border:0;border-radius:999px;padding:11px 16px;font:inherit;font-weight:900;cursor:pointer;
+      text-decoration:none;background:#f6c453;color:#08271e
+    }
+    .digiyCardActions a:first-child{background:#fff}
+
+    .qrOfficialSupports{
+      margin:28px auto;padding:26px;border:1px solid var(--line);border-radius:24px;background:#fff;
+      box-shadow:0 14px 38px rgba(16,44,31,.08)
+    }
+    .qrOfficialSupportsHead{max-width:760px;margin:0 auto 20px;text-align:center}
+    .qrOfficialSupportsKicker{
+      display:inline-block;color:var(--green-dark);background:var(--soft);border:1px solid #cbe4d5;
+      border-radius:999px;padding:7px 11px;font-size:.78rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase
+    }
+    .qrOfficialSupports h2{margin:12px 0 8px;font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.12;color:var(--ink)}
+    .qrOfficialSupportsHead p{margin:0;color:var(--muted);line-height:1.6}
+    .qrOfficialSupportsGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .qrSupportCard{
+      display:flex;flex-direction:column;min-height:100%;padding:20px;border:1px solid var(--line);
+      border-radius:18px;background:linear-gradient(180deg,#fff,#f8fbf9)
+    }
+    .qrSupportCardIcon{
+      width:46px;height:46px;display:grid;place-items:center;border-radius:14px;background:var(--green);
+      color:#fff;font-size:1.35rem;box-shadow:0 9px 22px rgba(11,107,69,.18)
+    }
+    .qrSupportCard h3{margin:14px 0 7px;font-size:1.14rem;color:var(--green-dark)}
+    .qrSupportCard p{margin:0 0 16px;color:var(--muted);line-height:1.55}
+    .qrSupportActions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:auto}
+    .qrSupportActions a,.qrSupportActions button{
+      display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:12px;
+      padding:10px 12px;text-align:center;text-decoration:none;font:inherit;font-weight:900;
+      line-height:1.25;cursor:pointer;background:var(--green);color:#fff;border:1px solid var(--green)
+    }
+    .qrSupportActions a:nth-child(2){background:#fff;color:var(--green-dark);border-color:#bcd8c9}
+    .qrSupportActions button{background:var(--gold);color:#08271e;border-color:var(--gold)}
+    .qrSupportNote{
+      margin:16px 0 0;padding:12px 14px;border-radius:14px;background:var(--soft);
+      color:var(--green-dark);font-size:.86rem;line-height:1.5;text-align:center;font-weight:750
+    }
+
     .legal{
-      margin:8px 0 48px;background:#fff;border:1px solid var(--line);border-radius:18px;
+      margin:8px auto 48px;background:#fff;border:1px solid var(--line);border-radius:18px;
       padding:18px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px
     }
     .legal b{display:block;margin-bottom:5px}
     footer{padding:24px 0 34px;color:var(--muted);font-size:.82rem;text-align:center}
-@media(max-width:850px){
+
+    @media(max-width:850px){
       .hero{grid-template-columns:1fr}
       .form-card{max-width:700px}
+      .pilotCampaign{grid-template-columns:1fr}
+      .pilotCampaignText{order:2}
+      .pilotCampaignMedia{order:1;max-width:520px;margin:auto}
+    }
+    @media(max-width:760px){
+      .digiyOfficialCard{grid-template-columns:1fr;padding:17px}
+      .digiyOfficialCardText{order:2}
+      .digiyOfficialCard img{order:1;max-height:620px}
+      .qrOfficialSupports{padding:17px}
+      .qrOfficialSupportsGrid{grid-template-columns:1fr}
+      .qrSupportActions{grid-template-columns:1fr}
     }
     @media(max-width:620px){
       .wrap{width:min(100% - 18px,1120px)}
@@ -153,6 +247,8 @@
       .full{grid-column:auto}
       form{padding:17px}
       .form-head{padding:20px 17px}
+      .pilotCampaign{padding:17px}
+      .pilotCampaignActions{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -286,7 +382,8 @@
             <label for="services">Présentez brièvement vos services *</label>
             <textarea id="services" name="services" maxlength="900" required placeholder="Ce que vous proposez, pour qui et dans quelle zone…"></textarea>
           </div>
-<div class="field full">
+
+          <div class="field full">
             <div class="check">
               <input id="consent" type="checkbox" required>
               <label for="consent">
@@ -305,6 +402,7 @@
             </p>
             <div class="status" id="statusBox" role="status" aria-live="polite"></div>
           </div>
+
           <div class="field full" id="reviewPanel" hidden>
             <div class="check" style="display:block">
               <strong style="display:block;margin-bottom:8px">Demande préparée</strong>
@@ -323,11 +421,43 @@
               </button>
             </div>
           </div>
-
         </div>
       </form>
     </section>
   </main>
+
+  <!-- CARTE CAMPAGNE PARTENAIRE PILOTE : CLIQUABLE, TÉLÉCHARGEABLE ET PARTAGEABLE -->
+  <section class="wrap pilotCampaign" aria-labelledby="pilotCampaignTitle">
+    <div class="pilotCampaignText">
+      <span class="pilotCampaignKicker">Support officiel partenaire pilote</span>
+      <h2 id="pilotCampaignTitle">50 activations pilotes.<br>30 jours offerts.</h2>
+      <p>
+        Ce visuel ouvre directement la demande d’activation. Sur téléphone, le bouton
+        <strong>Partager le visuel</strong> transmet l’image et le lien lorsque l’appareil le permet.
+        Le QR conduit vers cette même page.
+      </p>
+
+      <div class="pilotCampaignActions">
+        <a href="#pilotForm">Demander mon activation</a>
+        <button type="button" id="sharePilotCard">Partager le visuel</button>
+        <a href="./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png" download="DIGIYLYFE-50-ACTIVATIONS-PILOTES-30-JOURS.png">Télécharger le PNG</a>
+        <a href="./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png" target="_blank" rel="noopener">Ouvrir en grand</a>
+      </div>
+
+      <p class="pilotCampaignNote">
+        Astuce terrain : sur une publication numérique, partagez le lien de cette page avec le visuel.
+        Sur papier, le QR prend le relais.
+      </p>
+    </div>
+
+    <a class="pilotCampaignMedia" href="#pilotForm" aria-label="Accéder au formulaire de demande d’activation pilote">
+      <img
+        src="./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png"
+        alt="DIGIYLYFE — 50 activations pilotes, 30 jours offerts, QR vers la demande d’activation"
+        loading="eager"
+      >
+    </a>
+  </section>
 
   <!-- CARTE OFFICIELLE DIGIYLYFE 9:16 -->
   <section class="wrap digiyOfficialCard" aria-labelledby="digiyCardTitle">
@@ -344,158 +474,22 @@
     <img src="./CARTE-OFFICIELLE-DIGIYLYFE-QR-9x16(1).png" alt="Carte officielle verticale DIGIYLYFE avec QR vers digiylyfe.com" loading="lazy">
   </section>
 
-  <style>
-    .digiyOfficialCard{margin:28px auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,380px);gap:28px;align-items:center;padding:26px;border:1px solid rgba(246,196,83,.42);border-radius:24px;background:rgba(7,31,24,.96);color:#fff}
-    .digiyOfficialCard img{display:block;width:100%;height:auto;max-height:680px;object-fit:contain;border-radius:18px;box-shadow:0 18px 42px rgba(0,0,0,.28)}
-    .digiyCardKicker{display:inline-block;color:#f6c453;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
-    .digiyOfficialCard h2{margin:10px 0 12px;font-size:clamp(1.45rem,3vw,2.15rem);line-height:1.12;color:#fff}
-    .digiyOfficialCard p{margin:0;color:#dbe9e4;line-height:1.6}
-    .digiyCardActions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
-    .digiyCardActions a,.digiyCardActions button{border:0;border-radius:999px;padding:11px 16px;font:inherit;font-weight:900;cursor:pointer;text-decoration:none;background:#f6c453;color:#08271e}
-    .digiyCardActions a:first-child{background:#fff}
-    @media(max-width:760px){.digiyOfficialCard{grid-template-columns:1fr;padding:17px}.digiyOfficialCardText{order:2}.digiyOfficialCard img{order:1;max-height:620px}}
-
-    .qrOfficialSupports{
-      margin:28px auto;
-      padding:26px;
-      border:1px solid var(--line);
-      border-radius:24px;
-      background:#fff;
-      box-shadow:0 14px 38px rgba(16,44,31,.08)
-    }
-    .qrOfficialSupportsHead{max-width:760px;margin:0 auto 20px;text-align:center}
-    .qrOfficialSupportsKicker{
-      display:inline-block;
-      color:var(--green-dark);
-      background:var(--soft);
-      border:1px solid #cbe4d5;
-      border-radius:999px;
-      padding:7px 11px;
-      font-size:.78rem;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase
-    }
-    .qrOfficialSupports h2{
-      margin:12px 0 8px;
-      font-size:clamp(1.55rem,3vw,2.25rem);
-      line-height:1.12;
-      color:var(--ink)
-    }
-    .qrOfficialSupportsHead p{margin:0;color:var(--muted);line-height:1.6}
-    .qrOfficialSupportsGrid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:16px
-    }
-    .qrSupportCard{
-      display:flex;
-      flex-direction:column;
-      min-height:100%;
-      padding:20px;
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:linear-gradient(180deg,#fff,#f8fbf9)
-    }
-    .qrSupportCardIcon{
-      width:46px;
-      height:46px;
-      display:grid;
-      place-items:center;
-      border-radius:14px;
-      background:var(--green);
-      color:#fff;
-      font-size:1.35rem;
-      box-shadow:0 9px 22px rgba(11,107,69,.18)
-    }
-    .qrSupportCard h3{margin:14px 0 7px;font-size:1.14rem;color:var(--green-dark)}
-    .qrSupportCard p{margin:0 0 16px;color:var(--muted);line-height:1.55}
-    .qrSupportActions{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:10px;
-      margin-top:auto
-    }
-    .qrSupportActions a,
-    .qrSupportActions button{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-height:46px;
-      border-radius:12px;
-      padding:10px 12px;
-      text-align:center;
-      text-decoration:none;
-      font:inherit;
-      font-weight:900;
-      line-height:1.25;
-      cursor:pointer;
-      background:var(--green);
-      color:#fff;
-      border:1px solid var(--green)
-    }
-    .qrSupportActions a:nth-child(2){
-      background:#fff;
-      color:var(--green-dark);
-      border-color:#bcd8c9
-    }
-    .qrSupportActions button{
-      background:var(--gold);
-      color:#08271e;
-      border-color:var(--gold)
-    }
-    .qrSupportActions button:focus-visible,
-    .qrSupportActions a:focus-visible{
-      outline:3px solid rgba(11,107,69,.22);
-      outline-offset:3px
-    }
-    .qrSupportNote{
-      margin:16px 0 0;
-      padding:12px 14px;
-      border-radius:14px;
-      background:var(--soft);
-      color:var(--green-dark);
-      font-size:.86rem;
-      line-height:1.5;
-      text-align:center;
-      font-weight:750
-    }
-    @media(max-width:760px){
-      .qrOfficialSupports{padding:17px}
-      .qrOfficialSupportsGrid{grid-template-columns:1fr}
-      .qrSupportActions{grid-template-columns:1fr}
-    }
-  </style>
-
   <!-- SUPPORTS QR OFFICIELS DIGIYLYFE -->
   <section class="wrap qrOfficialSupports" aria-labelledby="qrOfficialSupportsTitle">
     <div class="qrOfficialSupportsHead">
       <span class="qrOfficialSupportsKicker">Supports de communication</span>
       <h2 id="qrOfficialSupportsTitle">Supports QR officiels DIGIYLYFE</h2>
-      <p>
-        Consultez les modèles validés ou téléchargez directement les PDF prêts pour l’impression.
-      </p>
+      <p>Consultez les modèles validés ou téléchargez directement les PDF prêts pour l’impression.</p>
     </div>
 
     <div class="qrOfficialSupportsGrid">
       <article class="qrSupportCard">
         <div class="qrSupportCardIcon" aria-hidden="true">A6</div>
         <h3>Carte de communication A6</h3>
-        <p>
-          Format compact pour les comptoirs, les chambres, les boutiques et les partenaires terrain.
-        </p>
+        <p>Format compact pour les comptoirs, les chambres, les boutiques et les partenaires terrain.</p>
         <div class="qrSupportActions">
-          <a
-            href="./qr-communication/DIGIYLYFE-QR-COMMUNICATION-A6-FINAL.html"
-            target="_blank"
-            rel="noopener"
-          >Voir la carte A6</a>
-          <a
-            href="./qr-communication/DIGIYLYFE-QR-COMMUNICATION-A6-IMPRIMEUR-FINAL.pdf"
-            target="_blank"
-            rel="noopener"
-            download
-          >Télécharger le PDF A6</a>
+          <a href="./qr-communication/DIGIYLYFE-QR-COMMUNICATION-A6-FINAL.html" target="_blank" rel="noopener">Voir la carte A6</a>
+          <a href="./qr-communication/DIGIYLYFE-QR-COMMUNICATION-A6-IMPRIMEUR-FINAL.pdf" target="_blank" rel="noopener" download>Télécharger le PDF A6</a>
           <button
             type="button"
             class="shareQrSupport"
@@ -509,21 +503,10 @@
       <article class="qrSupportCard">
         <div class="qrSupportCardIcon" aria-hidden="true">A5</div>
         <h3>Présentoir de comptoir A5</h3>
-        <p>
-          Format plus visible pour les réceptions, les restaurants et les espaces partenaires.
-        </p>
+        <p>Format plus visible pour les réceptions, les restaurants et les espaces partenaires.</p>
         <div class="qrSupportActions">
-          <a
-            href="./qr-communication/DIGIYLYFE-QR-PRESENTOIR-A5-FINAL.html"
-            target="_blank"
-            rel="noopener"
-          >Voir le présentoir A5</a>
-          <a
-            href="./qr-communication/DIGIYLYFE-QR-PRESENTOIR-A5-IMPRIMEUR-FINAL.pdf"
-            target="_blank"
-            rel="noopener"
-            download
-          >Télécharger le PDF A5</a>
+          <a href="./qr-communication/DIGIYLYFE-QR-PRESENTOIR-A5-FINAL.html" target="_blank" rel="noopener">Voir le présentoir A5</a>
+          <a href="./qr-communication/DIGIYLYFE-QR-PRESENTOIR-A5-IMPRIMEUR-FINAL.pdf" target="_blank" rel="noopener" download>Télécharger le PDF A5</a>
           <button
             type="button"
             class="shareQrSupport"
@@ -562,59 +545,101 @@
   <script>
     "use strict";
 
-    document.getElementById("shareDigiyCard")?.addEventListener("click", async () => {
-      const shareData = {
-        title: "DIGIYLYFE — Le Club digital des entrepreneurs du terrain",
-        text: "Découvrez DIGIYLYFE : une adresse professionnelle, un QR direct, des contacts directs et 0 % de commission.",
-        url: "https://digiylyfe.com/"
-      };
+    const PAGE_URL = "https://partenaire-pilote.digiylyfe.com/";
+    const PILOT_CARD_PATH = "./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png";
+
+    async function shareLinkOrCopy({ title, text, url, button, copiedLabel = "Lien copié" }) {
       if (navigator.share) {
-        try { await navigator.share(shareData); } catch (_) {}
-      } else {
         try {
-          await navigator.clipboard.writeText(shareData.url);
-          alert("Lien DIGIYLYFE copié.");
-        } catch (_) {
-          window.prompt("Copiez le lien DIGIYLYFE :", shareData.url);
+          await navigator.share({ title, text, url });
+          return;
+        } catch (error) {
+          if (error?.name === "AbortError") return;
         }
       }
-    });
 
+      const originalLabel = button?.textContent;
+      try {
+        await navigator.clipboard.writeText(url);
+        if (button) {
+          button.textContent = copiedLabel;
+          setTimeout(() => { button.textContent = originalLabel; }, 1800);
+        } else {
+          alert("Lien copié.");
+        }
+      } catch (_) {
+        window.prompt("Copiez ce lien DIGIYLYFE :", url);
+      }
+    }
 
-    document.querySelectorAll(".shareQrSupport").forEach((button) => {
-      button.addEventListener("click", async () => {
-        const originalLabel = button.textContent;
-        const absoluteUrl = new URL(button.dataset.shareUrl, window.location.href).href;
+    document.getElementById("sharePilotCard")?.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      const originalLabel = button.textContent;
+      button.textContent = "Préparation…";
+
+      try {
+        const imageUrl = new URL(PILOT_CARD_PATH, window.location.href).href;
+        const response = await fetch(imageUrl, { cache: "no-store" });
+        if (!response.ok) throw new Error("Image introuvable");
+
+        const blob = await response.blob();
+        const file = new File(
+          [blob],
+          "DIGIYLYFE-50-ACTIVATIONS-PILOTES-30-JOURS.png",
+          { type: blob.type || "image/png" }
+        );
+
         const shareData = {
-          title: button.dataset.shareTitle || "DIGIYLYFE",
-          text: button.dataset.shareText || "Découvrez ce support officiel DIGIYLYFE.",
-          url: absoluteUrl
+          title: "DIGIYLYFE — 50 activations pilotes",
+          text: "30 jours offerts. Aucun paiement demandé. Demandez votre activation pilote DIGIYLYFE.",
+          url: PAGE_URL,
+          files: [file]
         };
 
-        if (navigator.share) {
-          try {
-            await navigator.share(shareData);
-          } catch (error) {
-            if (error?.name !== "AbortError") {
-              console.warn("Partage impossible :", error);
-            }
-          }
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share(shareData);
+          button.textContent = originalLabel;
           return;
         }
-
-        try {
-          await navigator.clipboard.writeText(absoluteUrl);
-          button.textContent = "Lien copié";
-          setTimeout(() => {
-            button.textContent = originalLabel;
-          }, 1800);
-        } catch (_) {
-          window.prompt("Copiez ce lien DIGIYLYFE :", absoluteUrl);
+      } catch (error) {
+        if (error?.name === "AbortError") {
+          button.textContent = originalLabel;
+          return;
         }
+        console.warn("Partage du fichier impossible :", error);
+      }
+
+      button.textContent = originalLabel;
+      await shareLinkOrCopy({
+        title: "DIGIYLYFE — 50 activations pilotes",
+        text: "30 jours offerts. Aucun paiement demandé. Demandez votre activation pilote DIGIYLYFE.",
+        url: PAGE_URL,
+        button
       });
     });
 
-    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V10-QR-PARTAGE-20260720";
+    document.getElementById("shareDigiyCard")?.addEventListener("click", async (event) => {
+      await shareLinkOrCopy({
+        title: "DIGIYLYFE — Le Club digital des entrepreneurs du terrain",
+        text: "Découvrez DIGIYLYFE : une adresse professionnelle, un QR direct, des contacts directs et 0 % de commission.",
+        url: "https://digiylyfe.com/",
+        button: event.currentTarget
+      });
+    });
+
+    document.querySelectorAll(".shareQrSupport").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const absoluteUrl = new URL(button.dataset.shareUrl, window.location.href).href;
+        await shareLinkOrCopy({
+          title: button.dataset.shareTitle || "DIGIYLYFE",
+          text: button.dataset.shareText || "Découvrez ce support officiel DIGIYLYFE.",
+          url: absoluteUrl,
+          button
+        });
+      });
+    });
+
+    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V11-CARTE-PILOTE-CLIQUABLE-20260720";
     const DIGIY_SMS_NUMBER = "+221771342889";
     const STORAGE_KEY = "digiy_pilot_draft_v1";
 
@@ -671,7 +696,6 @@
 
     function collectDraft() {
       const existing = readDraft();
-
       return {
         reference: existing?.reference || createReference(),
         full_name: clean(document.getElementById("fullName").value),
@@ -710,7 +734,6 @@
 
     function fillForm(draft) {
       if (!draft) return;
-
       document.getElementById("fullName").value = draft.full_name || "";
       document.getElementById("businessName").value = draft.business_name || "";
       document.getElementById("module").value = draft.module_code || "";
@@ -729,10 +752,9 @@
       const moduleCode = gsmSafe(draft.module_code).slice(0, 15);
       const city = gsmSafe(draft.city).slice(0, 30);
       const phone = gsmSafe(draft.phone).slice(0, 24);
-
       const contact = gsmSafe(draft.contact_label || draft.contact_preference).slice(0, 24);
 
-      const lines = [
+      return [
         "DEMANDE DIGIY PILOTE",
         `Ref: ${gsmSafe(draft.reference)}`,
         `Nom: ${name}`,
@@ -742,9 +764,7 @@
         `Tel: ${phone}`,
         contact ? `Contact: ${contact}` : "",
         "Merci de me rappeler pour finaliser ma fiche."
-      ].filter(Boolean);
-
-      return lines.join("\n");
+      ].filter(Boolean).join("\n");
     }
 
     function buildSmsHref(message) {
@@ -754,7 +774,6 @@
 
     function prepareReview(draft) {
       const message = makeShortSms(draft);
-
       preparedMessage.value = message;
       smsLink.href = buildSmsHref(message);
       reviewPanel.hidden = false;
@@ -762,17 +781,11 @@
       if (MOBILE_SMS_SUPPORTED) {
         smsLink.hidden = false;
         copyBtn.style.gridColumn = "";
-        showStatus(
-          "success",
-          "SMS court préparé. Vérifiez le texte puis ouvrez votre application SMS."
-        );
+        showStatus("success","SMS court préparé. Vérifiez le texte puis ouvrez votre application SMS.");
       } else {
         smsLink.hidden = true;
         copyBtn.style.gridColumn = "1 / -1";
-        showStatus(
-          "success",
-          "Vous êtes sur ordinateur. Copiez la demande puis envoyez-la depuis votre téléphone."
-        );
+        showStatus("success","Vous êtes sur ordinateur. Copiez la demande puis envoyez-la depuis votre téléphone.");
       }
 
       reviewPanel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -784,7 +797,6 @@
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
@@ -797,17 +809,13 @@
 
     copyBtn.addEventListener("click", async () => {
       const message = preparedMessage.value;
-
       try {
         await navigator.clipboard.writeText(message);
-        showStatus("success", "Demande copiée. Vous pouvez la coller dans un SMS.");
+        showStatus("success","Demande copiée. Vous pouvez la coller dans un SMS.");
       } catch (error) {
         preparedMessage.focus();
         preparedMessage.select();
-        showStatus(
-          "error",
-          "Copie automatique impossible. Le texte est sélectionné : utilisez Copier."
-        );
+        showStatus("error","Copie automatique impossible. Le texte est sélectionné : utilisez Copier.");
       }
     });
 
@@ -816,30 +824,21 @@
       form.reset();
       preparedMessage.value = "";
       reviewPanel.hidden = true;
-      showStatus("success", "Le brouillon a été effacé de cet appareil.");
+      showStatus("success","Le brouillon a été effacé de cet appareil.");
     });
 
     smsLink.addEventListener("click", (event) => {
       if (!MOBILE_SMS_SUPPORTED) {
         event.preventDefault();
-        showStatus(
-          "error",
-          "Ouverture SMS non disponible sur cet ordinateur. Utilisez Copier."
-        );
+        showStatus("error","Ouverture SMS non disponible sur cet ordinateur. Utilisez Copier.");
         return;
       }
-
-      showStatus(
-        "success",
-        "L’application SMS va s’ouvrir avec la demande adressée à DIGIYLYFE."
-      );
+      showStatus("success","L’application SMS va s’ouvrir avec la demande adressée à DIGIYLYFE.");
     });
 
     const savedDraft = readDraft();
-
     if (savedDraft) {
       fillForm(savedDraft);
-
       if (
         savedDraft.full_name &&
         savedDraft.module_code &&
@@ -849,34 +848,9 @@
       ) {
         prepareReview(savedDraft);
       } else {
-        showStatus(
-          "success",
-          "Un brouillon local a été retrouvé sur cet appareil. Complétez-le puis préparez la demande."
-        );
+        showStatus("success","Un brouillon local a été retrouvé sur cet appareil. Complétez-le puis préparez la demande.");
       }
     }
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
