@@ -1,18 +1,18 @@
 <!doctype html>
-<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V11-CARTE-PILOTE-CLIQUABLE-20260720 -->
+<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V12-LIVRABLES-CLAIRS-20260723 -->
 <html lang="fr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0b5d3b">
-  <meta name="description" content="Programme pilote DIGIYLYFE : activez une fiche professionnelle durable, une carte digitale et un QR personnel. 30 jours offerts pour tester votre présence, sans paiement ni reconduction automatique.">
+  <meta name="description" content="Programme pilote DIGIYLYFE : chaque professionnel retenu reçoit une fiche professionnelle personnalisée, une carte digitale et un QR personnel. 30 jours offerts après activation réelle, sans paiement ni reconduction automatique.">
   <title>DIGIYLYFE — Activez votre présence professionnelle pilote</title>
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://partenaire-pilote.digiylyfe.com/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://partenaire-pilote.digiylyfe.com/">
   <meta property="og:title" content="DIGIYLYFE — 50 activations pilotes">
-  <meta property="og:description" content="30 jours offerts pour activer et tester votre présence professionnelle. Aucun paiement demandé.">
+  <meta property="og:description" content="Une fiche professionnelle, une carte digitale et un QR personnel. 30 jours offerts après activation réelle. Aucun paiement demandé.">
   <meta property="og:image" content="https://partenaire-pilote.digiylyfe.com/ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -78,6 +78,22 @@
     .promise .promise-free{
       grid-column:1/-1;background:var(--soft);border-color:#cbe4d5;color:var(--green-dark);font-weight:900
     }
+    .pilotDeliverables{
+      margin:18px 0;padding:18px;border:1px solid #bcd8c9;border-radius:18px;
+      background:linear-gradient(180deg,#fff,#f3faf6);box-shadow:0 10px 28px rgba(20,50,35,.07)
+    }
+    .pilotDeliverables h2{margin:0 0 8px;color:var(--green-dark);font-size:1.2rem;line-height:1.25}
+    .pilotDeliverables>p{margin:0;color:#475467;line-height:1.58}
+    .pilotDeliverablesList{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+    .pilotDeliverablesList article{
+      padding:13px;border:1px solid var(--line);border-radius:14px;background:#fff
+    }
+    .pilotDeliverablesList strong{display:block;color:var(--green-dark);font-size:.9rem;line-height:1.3}
+    .pilotDeliverablesList span{display:block;margin-top:5px;color:var(--muted);font-size:.8rem;line-height:1.45}
+    .pilotDeliverablesFlow{
+      margin:14px 0 0;padding:11px 13px;border-radius:13px;background:#e8f5ed;
+      color:var(--green-dark);font-size:.84rem;line-height:1.5;font-weight:800
+    }
     .presencePath{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
     .presencePath article{
       background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;
@@ -93,6 +109,10 @@
     .form-head{padding:22px 22px 18px;background:linear-gradient(135deg,var(--green-dark),var(--green));color:#fff}
     .form-head h2{margin:0 0 6px;font-size:1.45rem}
     .form-head p{margin:0;color:#dcf4e8;line-height:1.5}
+    .form-head .formPurpose{
+      margin-top:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.22);
+      border-radius:12px;background:rgba(255,255,255,.08);font-size:.84rem;color:#f0fff7
+    }
     form{padding:22px;scroll-margin-top:18px}
     .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
     .field{display:flex;flex-direction:column;gap:7px}
@@ -160,6 +180,11 @@
       background:rgba(7,31,24,.92);color:#fff;text-align:center;font-size:.82rem;font-weight:900
     }
     .pilotCampaignNote{margin-top:12px!important;font-size:.84rem;color:#bdd8cd!important}
+    .pilotCampaignClarification{
+      margin-top:14px!important;padding:12px 14px;border-radius:14px;
+      background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);
+      color:#f1fff8!important;font-size:.84rem;line-height:1.55!important
+    }
 
     .digiyOfficialCard{
       margin:28px auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,380px);
@@ -243,7 +268,7 @@
       .nav{align-items:flex-start}
       .pill{font-size:.72rem;padding:7px 9px}
       .hero{padding-top:18px;gap:22px}
-      .promise,.presencePath,.grid,.legal{grid-template-columns:1fr}
+      .promise,.pilotDeliverablesList,.presencePath,.grid,.legal{grid-template-columns:1fr}
       .full{grid-column:auto}
       form{padding:17px}
       .form-head{padding:20px 17px}
@@ -280,10 +305,35 @@
         <div class="promise-free"><span>✓</span>30 jours offerts pour activer et tester votre présence — aucun paiement demandé</div>
         <div class="promise-free"><span>✓</span>Après le pilote, vous décidez librement : continuer à partir de 19 900 FCFA / mois selon le module choisi</div>
         <div><span>✓</span>Fiche professionnelle personnalisée</div>
-        <div><span>✓</span>Carte de visite digitale</div>
+        <div><span>✓</span>Carte de visite digitale personnelle</div>
         <div><span>✓</span>QR personnel vers votre fiche</div>
         <div><span>✓</span>0 % de commission DIGIY</div>
       </div>
+
+      <section class="pilotDeliverables" aria-labelledby="pilotDeliverablesTitle">
+        <h2 id="pilotDeliverablesTitle">Ce que reçoit chaque professionnel retenu</h2>
+        <p>
+          Après acceptation de la demande, DIGIYLYFE prépare les éléments ci-dessous à partir
+          des informations et contenus fournis par le professionnel.
+        </p>
+        <div class="pilotDeliverablesList">
+          <article>
+            <strong>1. Une fiche professionnelle</strong>
+            <span>Elle présente l’activité, les services, la zone, les photos ou vidéos autorisées et les contacts directs.</span>
+          </article>
+          <article>
+            <strong>2. Une carte de visite digitale</strong>
+            <span>Elle est personnalisée selon l’activité et peut être partagée sur téléphone ou utilisée comme support d’impression.</span>
+          </article>
+          <article>
+            <strong>3. Un QR personnel</strong>
+            <span>Il ouvre directement la fiche professionnelle, les services et le moyen de contact choisi.</span>
+          </article>
+        </div>
+        <p class="pilotDeliverablesFlow">
+          Demande étudiée → informations vérifiées → fiche et carte préparées → validation du professionnel → activation publique → début des 30 jours offerts.
+        </p>
+      </section>
 
       <div class="presencePath" aria-label="Comment fonctionne la présence DIGIYLYFE">
         <article>
@@ -301,8 +351,8 @@
       </div>
 
       <p class="fine">
-        Les 30 jours commencent uniquement lorsque votre fiche est réellement activée.
-        Ce pilote sert à tester une présence conçue pour durer, pas une publication éphémère dans un fil d’actualité.
+        Les 30 jours commencent uniquement lorsque votre fiche, votre carte digitale et votre QR personnel ont été préparés,
+        validés puis réellement activés. Ce pilote sert à tester une présence conçue pour durer, pas une publication éphémère dans un fil d’actualité.
         L’inscription reste une demande de participation : aucune fiche n’est publiée automatiquement et aucune donnée n’est envoyée vers une base externe.
         À la fin du pilote, vous choisissez librement : continuer avec une offre à partir de 19 900 FCFA par mois selon le module choisi — JE LOUE · LOC démarre à 26 000 FCFA par mois — ou mettre la fiche en pause. Aucune reconduction automatique et rien n’est facturé sans votre accord.
       </p>
@@ -312,6 +362,9 @@
       <div class="form-head">
         <h2 id="formTitle">Demander mon activation pilote</h2>
         <p>Quelques informations suffisent. La page prépare votre demande, puis vous l’envoyez directement par SMS à DIGIYLYFE.</p>
+        <p class="formPurpose">
+          Ces informations servent d’abord à étudier votre demande. Si elle est acceptée, elles permettront à DIGIYLYFE de préparer votre fiche professionnelle, votre carte de visite digitale et votre QR personnel avant votre validation.
+        </p>
       </div>
 
       <form id="pilotForm" novalidate>
@@ -388,8 +441,9 @@
               <input id="consent" type="checkbox" required>
               <label for="consent">
                 Je confirme que ces informations sont professionnelles et exactes.
-                J’autorise DIGIYLYFE à me recontacter pour étudier ma demande.
-                Je comprends que ce programme ne donne aucune part de propriété,
+                J’autorise DIGIYLYFE à me recontacter pour étudier ma demande et, si elle est acceptée,
+                à préparer une proposition de fiche professionnelle et de carte digitale avec QR personnel,
+                que je vérifierai avant toute publication. Je comprends que ce programme ne donne aucune part de propriété,
                 aucun droit social et aucun pouvoir de décision dans DIGIYLYFE.
               </label>
             </div>
@@ -436,6 +490,9 @@
         <strong>Partager le visuel</strong> transmet l’image et le lien lorsque l’appareil le permet.
         Le QR conduit vers cette même page.
       </p>
+      <p class="pilotCampaignClarification">
+        <strong>Important :</strong> ce visuel présente le programme des 50 invitations. Il ne constitue pas la carte personnelle du professionnel. Chaque candidat retenu reçoit ensuite sa propre carte de visite digitale avec son QR individuel vers sa fiche professionnelle.
+      </p>
 
       <div class="pilotCampaignActions">
         <a href="#pilotForm">Demander mon activation</a>
@@ -464,7 +521,7 @@
     <div class="digiyOfficialCardText">
       <span class="digiyCardKicker">Une adresse stable derrière chaque partage</span>
       <h2 id="digiyCardTitle">Le QR DIGIYLYFE ouvre le Club.<br>Votre QR ouvrira votre fiche professionnelle.</h2>
-      <p>Les réseaux et les cartes font circuler votre message. La fiche DIGIY rassemble vos services, vos photos, vos vidéos et vos contacts à une adresse claire, partageable et retrouvable. Chaque partenaire reçoit sa propre carte et son QR personnel vers cette fiche.</p>
+      <p>Les réseaux et les cartes font circuler votre message. La fiche DIGIY rassemble vos services, vos photos, vos vidéos et vos contacts à une adresse claire, partageable et retrouvable. Chaque partenaire retenu reçoit sa propre carte et son QR personnel vers cette fiche, après vérification et validation.</p>
       <div class="digiyCardActions">
         <a href="./CARTE-OFFICIELLE-DIGIYLYFE-QR-9x16(1).png" target="_blank" rel="noopener">Ouvrir la carte</a>
         <a href="./CARTE-OFFICIELLE-DIGIYLYFE-QR-9x16(1).png" download>Télécharger</a>
@@ -526,11 +583,11 @@
   <section class="wrap legal">
     <div>
       <b>Activation contrôlée</b>
-      DIGIYLYFE vérifie les informations avant toute publication.
+      DIGIYLYFE vérifie les informations et fait valider la présentation avant toute publication.
     </div>
     <div>
       <b>30 jours pour mesurer</b>
-      Le pilote démarre à l’activation de la fiche et sert à vérifier son utilité réelle sur le terrain.
+      Le pilote démarre après activation réelle de la fiche, de la carte digitale et du QR personnel.
     </div>
     <div>
       <b>Présence organisée</b>
@@ -591,7 +648,7 @@
 
         const shareData = {
           title: "DIGIYLYFE — 50 activations pilotes",
-          text: "30 jours offerts. Aucun paiement demandé. Demandez votre activation pilote DIGIYLYFE.",
+          text: "Une fiche professionnelle, une carte digitale et un QR personnel. 30 jours offerts après activation réelle. Aucun paiement demandé.",
           url: PAGE_URL,
           files: [file]
         };
@@ -612,7 +669,7 @@
       button.textContent = originalLabel;
       await shareLinkOrCopy({
         title: "DIGIYLYFE — 50 activations pilotes",
-        text: "30 jours offerts. Aucun paiement demandé. Demandez votre activation pilote DIGIYLYFE.",
+        text: "Une fiche professionnelle, une carte digitale et un QR personnel. 30 jours offerts après activation réelle. Aucun paiement demandé.",
         url: PAGE_URL,
         button
       });
@@ -639,7 +696,7 @@
       });
     });
 
-    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V11-CARTE-PILOTE-CLIQUABLE-20260720";
+    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V12-LIVRABLES-CLAIRS-20260723";
     const DIGIY_SMS_NUMBER = "+221771342889";
     const STORAGE_KEY = "digiy_pilot_draft_v1";
 
@@ -763,7 +820,7 @@
         `Ville: ${city}`,
         `Tel: ${phone}`,
         contact ? `Contact: ${contact}` : "",
-        "Merci de me rappeler pour finaliser ma fiche."
+        "Merci de me rappeler pour finaliser ma fiche, ma carte digitale et mon QR personnel."
       ].filter(Boolean).join("\n");
     }
 
