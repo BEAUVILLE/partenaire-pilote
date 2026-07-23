@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V12-LIVRABLES-CLAIRS-20260723 -->
+<!-- BUILD DIGIY-PILOT-LOCAL-SMS-V14-LECTEUR-ENCART-50-VISIBLE-20260723 -->
 <html lang="fr">
 <head>
   <meta charset="utf-8">
@@ -136,13 +136,28 @@
       background:var(--green);color:#fff;cursor:pointer;box-shadow:0 10px 24px rgba(11,107,69,.22)
     }
     .btn:hover{background:var(--green-dark)}
+    .essentialReader{margin:14px 0 18px}
+    .essentialReader button{
+      border:1px solid #bcd8c9;border-radius:999px;padding:12px 17px;background:#fff;
+      color:var(--green-dark);font:inherit;font-weight:900;cursor:pointer;
+      box-shadow:0 8px 22px rgba(20,50,35,.08)
+    }
+    .essentialReader button:hover{background:var(--soft)}
+    .essentialReader button[aria-pressed="true"]{
+      background:var(--green-dark);color:#fff;border-color:var(--green-dark)
+    }
+    .srOnly{
+      position:absolute!important;width:1px!important;height:1px!important;padding:0!important;
+      margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;
+      white-space:nowrap!important;border:0!important
+    }
     .status{display:none;margin-top:14px;border-radius:14px;padding:13px 14px;font-size:.9rem;line-height:1.5}
     .status.show{display:block}
     .status.success{background:#ecfdf3;color:#067647;border:1px solid #abefc6}
     .status.error{background:#fff1f0;color:var(--danger);border:1px solid #f4c7c3}
 
     .pilotCampaign{
-      margin:12px auto 28px;
+      margin:18px auto 30px;
       display:grid;
       grid-template-columns:minmax(0,1fr) minmax(280px,430px);
       gap:28px;
@@ -274,6 +289,7 @@
       .form-head{padding:20px 17px}
       .pilotCampaign{padding:17px}
       .pilotCampaignActions{grid-template-columns:1fr}
+      .essentialReader button{width:100%;min-height:48px}
     }
   </style>
 </head>
@@ -290,6 +306,43 @@
     </div>
   </header>
 
+  <!-- CARTE CAMPAGNE PARTENAIRE PILOTE : CLIQUABLE, TÉLÉCHARGEABLE ET PARTAGEABLE -->
+  <section class="wrap pilotCampaign" aria-labelledby="pilotCampaignTitle">
+    <div class="pilotCampaignText">
+      <span class="pilotCampaignKicker">Support officiel partenaire pilote</span>
+      <h2 id="pilotCampaignTitle">50 activations pilotes.<br>30 jours offerts.</h2>
+      <p>
+        Ce visuel ouvre directement la demande d’activation. Sur téléphone, le bouton
+        <strong>Partager le visuel</strong> transmet l’image et le lien lorsque l’appareil le permet.
+        Le QR conduit vers cette même page.
+      </p>
+      <p class="pilotCampaignClarification">
+        <strong>Important :</strong> ce visuel présente le programme des 50 invitations. Il ne constitue pas la carte personnelle du professionnel. Chaque candidat retenu reçoit ensuite sa propre carte de visite digitale avec son QR individuel vers sa fiche professionnelle.
+      </p>
+
+      <div class="pilotCampaignActions">
+        <a href="#pilotForm">Demander mon activation</a>
+        <button type="button" id="sharePilotCard">Partager le visuel</button>
+        <a href="./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png" download="DIGIYLYFE-50-ACTIVATIONS-PILOTES-30-JOURS.png">Télécharger le PNG</a>
+        <a href="./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png" target="_blank" rel="noopener">Ouvrir en grand</a>
+      </div>
+
+      <p class="pilotCampaignNote">
+        Astuce terrain : sur une publication numérique, partagez le lien de cette page avec le visuel.
+        Sur papier, le QR prend le relais.
+      </p>
+    </div>
+
+    <a class="pilotCampaignMedia" href="#pilotForm" aria-label="Accéder au formulaire de demande d’activation pilote">
+      <img
+        src="./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png"
+        alt="DIGIYLYFE — 50 activations pilotes, 30 jours offerts, QR vers la demande d’activation"
+        loading="eager"
+      >
+    </a>
+  </section>
+
+
   <main class="wrap hero">
     <section>
       <div class="kicker">Programme partenaire pilote · 30 jours de test offerts</div>
@@ -300,6 +353,11 @@
         sur WhatsApp, TikTok, YouTube, par SMS ou avec votre carte imprimée :
         les réseaux diffusent, votre fiche reste accessible.
       </p>
+
+      <div class="essentialReader">
+        <button id="essentialReaderBtn" type="button" aria-pressed="false">▶ Écouter l’essentiel</button>
+        <span id="essentialReaderStatus" class="srOnly" role="status" aria-live="polite"></span>
+      </div>
 
       <div class="promise">
         <div class="promise-free"><span>✓</span>30 jours offerts pour activer et tester votre présence — aucun paiement demandé</div>
@@ -480,42 +538,6 @@
     </section>
   </main>
 
-  <!-- CARTE CAMPAGNE PARTENAIRE PILOTE : CLIQUABLE, TÉLÉCHARGEABLE ET PARTAGEABLE -->
-  <section class="wrap pilotCampaign" aria-labelledby="pilotCampaignTitle">
-    <div class="pilotCampaignText">
-      <span class="pilotCampaignKicker">Support officiel partenaire pilote</span>
-      <h2 id="pilotCampaignTitle">50 activations pilotes.<br>30 jours offerts.</h2>
-      <p>
-        Ce visuel ouvre directement la demande d’activation. Sur téléphone, le bouton
-        <strong>Partager le visuel</strong> transmet l’image et le lien lorsque l’appareil le permet.
-        Le QR conduit vers cette même page.
-      </p>
-      <p class="pilotCampaignClarification">
-        <strong>Important :</strong> ce visuel présente le programme des 50 invitations. Il ne constitue pas la carte personnelle du professionnel. Chaque candidat retenu reçoit ensuite sa propre carte de visite digitale avec son QR individuel vers sa fiche professionnelle.
-      </p>
-
-      <div class="pilotCampaignActions">
-        <a href="#pilotForm">Demander mon activation</a>
-        <button type="button" id="sharePilotCard">Partager le visuel</button>
-        <a href="./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png" download="DIGIYLYFE-50-ACTIVATIONS-PILOTES-30-JOURS.png">Télécharger le PNG</a>
-        <a href="./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png" target="_blank" rel="noopener">Ouvrir en grand</a>
-      </div>
-
-      <p class="pilotCampaignNote">
-        Astuce terrain : sur une publication numérique, partagez le lien de cette page avec le visuel.
-        Sur papier, le QR prend le relais.
-      </p>
-    </div>
-
-    <a class="pilotCampaignMedia" href="#pilotForm" aria-label="Accéder au formulaire de demande d’activation pilote">
-      <img
-        src="./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png"
-        alt="DIGIYLYFE — 50 activations pilotes, 30 jours offerts, QR vers la demande d’activation"
-        loading="eager"
-      >
-    </a>
-  </section>
-
   <!-- CARTE OFFICIELLE DIGIYLYFE 9:16 -->
   <section class="wrap digiyOfficialCard" aria-labelledby="digiyCardTitle">
     <div class="digiyOfficialCardText">
@@ -601,6 +623,74 @@
 
   <script>
     "use strict";
+
+    const ESSENTIAL_READER_TEXT = [
+      "Bienvenue dans le programme partenaire pilote DIGIYLYFE.",
+      "Si votre demande est retenue, DIGIYLYFE prépare votre fiche professionnelle personnalisée, votre carte de visite digitale personnelle et votre QR individuel.",
+      "Vous vérifiez ces éléments avant leur publication.",
+      "Les trente jours offerts commencent uniquement après leur activation réelle.",
+      "Vos clients vous contactent directement et DIGIYLYFE ne prend aucune commission.",
+      "À la fin du pilote, vous choisissez librement de continuer selon le module choisi ou de mettre votre fiche en pause.",
+      "Aucun paiement et aucune reconduction automatique sans votre accord."
+    ].join(" ");
+
+    const essentialReaderBtn = document.getElementById("essentialReaderBtn");
+    const essentialReaderStatus = document.getElementById("essentialReaderStatus");
+    let essentialReaderUtterance = null;
+
+    function chooseFrenchVoice() {
+      const voices = window.speechSynthesis?.getVoices?.() || [];
+      return voices.find((voice) => /^fr[-_]SN$/i.test(voice.lang)) ||
+        voices.find((voice) => /^fr[-_]FR$/i.test(voice.lang)) ||
+        voices.find((voice) => /^fr/i.test(voice.lang)) ||
+        null;
+    }
+
+    function resetEssentialReader(statusMessage = "") {
+      essentialReaderBtn?.setAttribute("aria-pressed", "false");
+      if (essentialReaderBtn) essentialReaderBtn.textContent = "▶ Écouter l’essentiel";
+      if (essentialReaderStatus) essentialReaderStatus.textContent = statusMessage;
+      essentialReaderUtterance = null;
+    }
+
+    essentialReaderBtn?.addEventListener("click", () => {
+      if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+        essentialReaderBtn.textContent = "Lecture vocale indisponible";
+        essentialReaderBtn.disabled = true;
+        if (essentialReaderStatus) {
+          essentialReaderStatus.textContent = "La lecture vocale n’est pas disponible sur cet appareil.";
+        }
+        return;
+      }
+
+      if (
+        window.speechSynthesis.speaking ||
+        essentialReaderBtn.getAttribute("aria-pressed") === "true"
+      ) {
+        window.speechSynthesis.cancel();
+        resetEssentialReader("Lecture arrêtée.");
+        return;
+      }
+
+      essentialReaderUtterance = new SpeechSynthesisUtterance(ESSENTIAL_READER_TEXT);
+      essentialReaderUtterance.lang = "fr-FR";
+      essentialReaderUtterance.rate = 0.94;
+      essentialReaderUtterance.pitch = 1;
+
+      const voice = chooseFrenchVoice();
+      if (voice) essentialReaderUtterance.voice = voice;
+
+      essentialReaderUtterance.onstart = () => {
+        essentialReaderBtn.setAttribute("aria-pressed", "true");
+        essentialReaderBtn.textContent = "■ Arrêter la lecture";
+        if (essentialReaderStatus) essentialReaderStatus.textContent = "Lecture en cours.";
+      };
+      essentialReaderUtterance.onend = () => resetEssentialReader("Lecture terminée.");
+      essentialReaderUtterance.onerror = () => resetEssentialReader("Lecture interrompue.");
+
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(essentialReaderUtterance);
+    });
 
     const PAGE_URL = "https://partenaire-pilote.digiylyfe.com/";
     const PILOT_CARD_PATH = "./ChatGPT%20Image%2020%20juil.%202026%2C%2020_04_20.png";
@@ -696,7 +786,7 @@
       });
     });
 
-    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V12-LIVRABLES-CLAIRS-20260723";
+    const BUILD = "DIGIY-PILOT-LOCAL-SMS-V14-LECTEUR-ENCART-50-VISIBLE-20260723";
     const DIGIY_SMS_NUMBER = "+221771342889";
     const STORAGE_KEY = "digiy_pilot_draft_v1";
 
@@ -911,3 +1001,4 @@
   </script>
 </body>
 </html>
+
