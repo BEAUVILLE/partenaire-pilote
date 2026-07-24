@@ -1,15 +1,10 @@
-[README.txt](https://github.com/user-attachments/files/30330190/README.txt)
-DIGIYLYFE — VERSION V15 LOGOS OFFICIELS
+[README.txt](https://github.com/user-attachments/files/30331731/README.txt)[Uploading README.txt…DIGIYLYFE — V18 FLUIDE CLAIRE
 
-1. Le fichier index.html est autonome pour les deux nouveaux logos : ils sont intégrés directement dans le HTML.
-2. Remplacez simplement l'ancien index.html du dépôt partenaire-pilote par ce nouveau fichier.
-3. Les autres ressources déjà présentes dans le dépôt doivent rester en place : affiche pilote, carte QR 9:16 et dossier qr-communication.
-4. Les fichiers JPG et WEBP joints sont des copies optimisées facultatives pour un futur usage.
+1. Publier index.html à la racine du dépôt partenaire-pilote.
+2. Le logo est intégré directement dans le HTML : aucun fichier externe n'est requis.
+3. Numéro SMS configuré : +221 77 134 28 89.
+4. La page n'enregistre rien dans une base externe : brouillon local puis SMS direct.
+5. Les 30 jours commencent après préparation, validation et activation réelle.
+]()
 
-Modifications réalisées :
-- remplacement du carré « DY » par le logo officiel DIGIYLYFE ;
-- ajout du logo comme favicon ;
-- ajout de la signature DIGIYLYFE.COM en fin de page ;
-- adaptation mobile ;
-- contenu, formulaire SMS, tarifs et liens existants préservés.
 
